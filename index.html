@@ -13,104 +13,100 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#000;--bg2:#080808;--bg3:#0d0d0d;
-  --border:#1e1e1e;--border2:#2a2a2a;
-  --green:#00ff9d;--blue:#00d4ff;--purple:#bc13fe;
-  --yellow:#f5c518;--orange:#ff9944;--red:#ff4444;
-  --white:#ffffff;--g1:#cccccc;--g2:#888888;--g3:#444444;--g4:#222222;
+  --bg:#0f1117;--bg2:#161b24;--bg3:#1c2230;
+  --border:#252d3a;--border2:#2e3847;
+  --green:#00e87a;--blue:#29b6f6;--purple:#ce93d8;
+  --yellow:#ffd54f;--orange:#ffb74d;--red:#ef5350;
+  --white:#f0f4ff;--g1:#b0bec5;--g2:#78909c;--g3:#546e7a;--g4:#2e3847;
 }
 body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;font-size:14px;}
 
 /* ── TOP NAV ── */
-.nav{display:flex;background:#040404;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.nav{display:flex;background:#0a0e14;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
 .nav-uni{display:flex;flex:1;border-right:1px solid var(--border);}
-.uni-btn{flex:1;padding:14px 6px;border:none;background:none;font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;color:var(--g3);border-bottom:2px solid transparent;font-family:inherit;}
+.uni-btn{flex:1;padding:13px 6px;border:none;background:none;font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;color:var(--g3);border-bottom:2px solid transparent;font-family:inherit;}
 .uni-btn.soft.active{color:var(--green);border-bottom-color:var(--green);}
 .uni-btn.hard.active{color:var(--yellow);border-bottom-color:var(--yellow);}
 .nav-tabs{display:flex;flex:2;}
-.tab-btn{flex:1;padding:14px 4px;border:none;background:none;color:var(--g3);font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:inherit;}
+.tab-btn{flex:1;padding:13px 4px;border:none;background:none;color:var(--g3);font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:inherit;}
 .tab-btn.active{color:var(--green);border-bottom-color:var(--green);}
 
 /* ── SCAN CHIPS ── */
-.scan-bar{background:#040404;border-bottom:1px solid var(--border);padding:6px 12px;display:flex;gap:5px;overflow-x:auto;align-items:center;-webkit-overflow-scrolling:touch;}
+.scan-bar{background:#0a0e14;border-bottom:1px solid var(--border);padding:5px 12px;display:flex;gap:5px;overflow-x:auto;align-items:center;-webkit-overflow-scrolling:touch;}
 .scan-bar::-webkit-scrollbar{display:none;}
 .scan-lbl{color:var(--g3);font-size:9px;letter-spacing:1px;white-space:nowrap;font-weight:700;}
-.chip{padding:4px 10px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--g3);font-size:9px;cursor:pointer;white-space:nowrap;font-family:inherit;letter-spacing:.5px;}
-.chip.active{border-color:rgba(0,255,157,.4);background:rgba(0,255,157,.07);color:var(--green);font-weight:700;}
-.chip.active.hard{border-color:rgba(245,197,24,.4);background:rgba(245,197,24,.07);color:var(--yellow);}
+.chip{padding:3px 9px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--g2);font-size:9px;cursor:pointer;white-space:nowrap;font-family:inherit;letter-spacing:.5px;}
+.chip.active{border-color:rgba(0,232,122,.35);background:rgba(0,232,122,.08);color:var(--green);font-weight:700;}
+.chip.active.hard{border-color:rgba(255,213,79,.35);background:rgba(255,213,79,.08);color:var(--yellow);}
 
 /* ── TABLE ── */
-.container{padding:12px;}
+.container{padding:8px;}
 table{width:100%;border-collapse:collapse;}
-th{text-align:left;color:var(--g3);font-size:10px;padding:8px 10px;border-bottom:1px solid var(--border2);text-transform:uppercase;letter-spacing:.5px;font-weight:400;}
-td{padding:13px 10px;border-bottom:1px solid #0e0e0e;vertical-align:middle;}
-tr.stock-row{cursor:pointer;}
-tr.stock-row:active td,tr.stock-row.open td{background:#0a0a0a;}
-.ticker{font-weight:700;font-size:16px;color:var(--blue);letter-spacing:1px;}
-.score-big{font-weight:700;font-size:17px;}
-.score-max{color:var(--g3);font-size:9px;margin-left:1px;}
-.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:3px;font-size:10px;font-weight:600;}
-.b-green{background:rgba(0,255,157,.1);border:1px solid rgba(0,255,157,.3);color:var(--green);}
-.b-yellow{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--yellow);}
-.b-red{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);color:var(--red);}
-.b-none{color:var(--g3);}
-.pts{font-size:8px;opacity:.45;font-weight:400;}
-.warn{font-size:9px;}
-.expand-arrow{color:var(--g3);font-size:10px;transition:transform .2s;}
+th{text-align:left;color:var(--g3);font-size:9px;padding:5px 7px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.5px;font-weight:500;}
+td{padding:7px 7px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr.stock-row{cursor:pointer;transition:background .1s;}
+tr.stock-row:hover td{background:rgba(255,255,255,.03);}
+tr.stock-row.open td{background:rgba(41,182,246,.04);}
+.ticker{font-weight:700;font-size:13px;color:var(--blue);letter-spacing:.5px;}
+.score-big{font-weight:700;font-size:13px;}
+.score-max{color:var(--g3);font-size:8px;margin-left:1px;}
+.badge{display:inline-flex;align-items:center;gap:2px;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:600;}
+.b-green{background:rgba(0,232,122,.1);border:1px solid rgba(0,232,122,.25);color:var(--green);}
+.b-yellow{background:rgba(255,213,79,.1);border:1px solid rgba(255,213,79,.25);color:var(--yellow);}
+.b-red{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.25);color:#ff6b6b;}
+.b-none{color:var(--g3);font-size:10px;}
+.pts{font-size:7px;opacity:.35;font-weight:400;}
+.warn{font-size:8px;}
+.expand-arrow{color:var(--g3);font-size:8px;transition:transform .2s;}
 .expand-arrow.open{transform:rotate(180deg);}
-.cluster-icon{font-size:13px;}
 
 /* ── DETAIL PANEL ── */
 .detail-td{padding:0!important;border-bottom:1px solid var(--border2)!important;}
-.detail-pane{background:#050505;padding:16px;animation:fadeIn .25s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.d-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
-.d-name{font-size:20px;font-weight:700;color:var(--blue);letter-spacing:1.5px;}
-.d-score{font-size:24px;font-weight:700;}
-.d-meta{color:var(--g3);font-size:10px;margin-top:3px;letter-spacing:.5px;}
-.chart-section{margin-bottom:14px;}
-.chart-title{color:var(--g3);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
-.chart-box{background:#020202;border:1px solid var(--border);border-radius:4px;padding:10px 8px 6px;overflow:hidden;}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--g2);}
-.leg-line{width:14px;height:2px;border-radius:1px;}
-.no-chart{color:var(--g3);font-size:11px;padding:20px;text-align:center;letter-spacing:1px;}
+.detail-pane{background:#111620;padding:8px 10px;animation:fadeIn .2s ease;border-top:1px solid var(--border);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+.d-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.d-name{font-size:14px;font-weight:700;color:var(--blue);letter-spacing:.5px;}
+.d-score{font-size:16px;font-weight:700;}
+.d-meta{color:var(--g2);font-size:9px;margin-top:1px;}
+.chart-section{margin-bottom:6px;}
+.chart-title{color:var(--g2);font-size:8px;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;font-weight:600;}
+.no-chart{color:var(--g3);font-size:11px;padding:16px;text-align:center;}
 
 /* ── INFO CARDS ── */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:8px;margin-top:12px;}
-.card{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:12px;}
-.card-title{color:var(--g3);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;}
+.card{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:11px;}
+.card-title{color:var(--g3);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;font-weight:600;}
 .cluster-row{margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid var(--border);}
-.cluster-tickers{color:var(--g3);font-size:10px;margin-top:2px;padding-left:16px;}
+.cluster-tickers{color:var(--g2);font-size:10px;margin-top:2px;padding-left:16px;}
 
 /* ── UPLOAD ── */
-.upload-wrap{padding:16px;max-width:560px;}
-.upload-title{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--green);margin-bottom:18px;}
+.upload-wrap{padding:16px;max-width:540px;}
+.upload-title{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--green);margin-bottom:16px;}
 .upload-title.hard{color:var(--yellow);}
-.field{margin-bottom:12px;}
+.field{margin-bottom:11px;}
 .field label{display:block;color:var(--g3);font-size:9px;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase;}
-.field input[type=date],.field input[type=text]{background:var(--bg2);border:1px solid var(--border2);color:var(--white);padding:9px 11px;border-radius:4px;font-size:12px;width:100%;outline:none;font-family:inherit;}
-.drop-zone{border:2px dashed var(--g4);border-radius:8px;padding:32px 16px;text-align:center;cursor:pointer;background:var(--bg2);transition:all .2s;margin-bottom:12px;}
-.drop-zone:hover,.drop-zone.drag{border-color:var(--green);background:rgba(0,255,157,.04);}
-.drop-zone.ready{border-color:rgba(0,255,157,.4);border-style:solid;}
-.drop-icon{font-size:32px;margin-bottom:8px;}
-.drop-main{color:var(--g2);font-size:12px;line-height:1.8;}
+.field input[type=date],.field input[type=text]{background:var(--bg2);border:1px solid var(--border2);color:var(--white);padding:8px 10px;border-radius:4px;font-size:12px;width:100%;outline:none;font-family:inherit;}
+.drop-zone{border:2px dashed var(--border2);border-radius:8px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg2);transition:all .2s;margin-bottom:11px;}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--green);background:rgba(0,232,122,.04);}
+.drop-zone.ready{border-color:rgba(0,232,122,.4);border-style:solid;}
+.drop-icon{font-size:28px;margin-bottom:7px;}
+.drop-main{color:var(--g1);font-size:12px;line-height:1.8;}
 .drop-main.ok{color:var(--green);font-weight:600;}
 .drop-sub{color:var(--g3);font-size:10px;margin-top:3px;}
-.preview{background:#040404;border:1px solid var(--border);border-radius:4px;padding:10px;margin-bottom:12px;}
+.preview{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:9px;margin-bottom:11px;}
 .preview-lbl{color:var(--g3);font-size:8px;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase;}
-.preview-txt{color:var(--g3);font-size:9px;white-space:pre;overflow-x:auto;line-height:1.6;max-height:80px;}
+.preview-txt{color:var(--g2);font-size:9px;white-space:pre;overflow-x:auto;line-height:1.6;max-height:80px;}
 .err{color:var(--red);font-size:10px;min-height:14px;margin-bottom:8px;}
-.btn-add{background:var(--green);color:#000;border:none;padding:11px 24px;border-radius:5px;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1.5px;font-family:inherit;transition:opacity .2s;}
+.btn-add{background:var(--green);color:#000;border:none;padding:10px 22px;border-radius:5px;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1.5px;font-family:inherit;transition:opacity .2s;}
 .btn-add.hard{background:var(--yellow);}
-.btn-add:disabled{opacity:.35;cursor:not-allowed;}
-details summary{color:var(--g3);font-size:9px;letter-spacing:1px;cursor:pointer;margin-top:14px;text-transform:uppercase;user-select:none;}
+.btn-add:disabled{opacity:.3;cursor:not-allowed;}
+details summary{color:var(--g3);font-size:9px;letter-spacing:1px;cursor:pointer;margin-top:13px;text-transform:uppercase;user-select:none;}
 textarea{background:var(--bg2);border:1px solid var(--border2);color:var(--white);padding:10px;border-radius:4px;font-size:10px;width:100%;resize:vertical;line-height:1.7;outline:none;margin-top:7px;font-family:'Courier New',monospace;}
-.schema{margin-top:18px;padding:13px;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;}
-.schema-ttl{color:var(--g3);font-size:8px;letter-spacing:2px;margin-bottom:9px;text-transform:uppercase;}
-.schema-row{display:flex;gap:10px;margin-bottom:4px;}
-.schema-k{color:rgba(0,255,157,.5);min-width:90px;font-size:10px;font-family:'Courier New',monospace;}
-.schema-v{color:var(--g3);font-size:10px;}
+.schema{margin-top:16px;padding:12px;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;}
+.schema-ttl{color:var(--g3);font-size:8px;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;}
+.schema-row{display:flex;gap:10px;margin-bottom:3px;}
+.schema-k{color:rgba(0,232,122,.6);min-width:90px;font-size:10px;font-family:'Courier New',monospace;}
+.schema-v{color:var(--g2);font-size:10px;}
 
 /* ── COMPARE ── */
 .compare-wrap{padding:12px;overflow-x:auto;}
@@ -118,20 +114,20 @@ textarea{background:var(--bg2);border:1px solid var(--border2);color:var(--white
 
 /* ── MANAGE ── */
 .manage-wrap{padding:16px;}
-.manage-ttl{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green);margin-bottom:14px;text-transform:uppercase;}
+.manage-ttl{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green);margin-bottom:13px;text-transform:uppercase;}
 .manage-ttl.hard{color:var(--yellow);}
-.scan-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:10px;}
+.scan-item{display:flex;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);gap:10px;}
 .scan-info{flex:1;min-width:0;}
 .scan-name{color:var(--white);font-weight:600;font-size:13px;}
-.scan-meta{color:var(--g3);font-size:10px;margin-top:2px;}
-.seed-tag{color:rgba(0,255,157,.3);font-size:8px;margin-left:6px;letter-spacing:1px;}
-.btn-view{padding:5px 11px;background:rgba(0,255,157,.07);border:1px solid rgba(0,255,157,.2);color:var(--green);border-radius:4px;cursor:pointer;font-size:9px;font-weight:700;font-family:inherit;letter-spacing:.5px;}
-.btn-del{padding:5px 11px;background:rgba(255,68,68,.07);border:1px solid rgba(255,68,68,.2);color:var(--red);border-radius:4px;cursor:pointer;font-size:9px;font-weight:700;font-family:inherit;letter-spacing:.5px;}
+.scan-meta{color:var(--g2);font-size:10px;margin-top:2px;}
+.seed-tag{color:rgba(0,232,122,.3);font-size:8px;margin-left:6px;letter-spacing:1px;}
+.btn-view{padding:4px 10px;background:rgba(0,232,122,.08);border:1px solid rgba(0,232,122,.2);color:var(--green);border-radius:4px;cursor:pointer;font-size:9px;font-weight:700;font-family:inherit;}
+.btn-del{padding:4px 10px;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);color:var(--red);border-radius:4px;cursor:pointer;font-size:9px;font-weight:700;font-family:inherit;}
 
 /* ── EMPTY ── */
 .empty{text-align:center;padding:60px 20px;}
-.empty-icon{font-size:36px;margin-bottom:12px;}
-.empty-txt{color:var(--g3);font-size:12px;letter-spacing:1px;margin-bottom:16px;text-transform:uppercase;}
+.empty-icon{font-size:34px;margin-bottom:11px;}
+.empty-txt{color:var(--g3);font-size:12px;letter-spacing:1px;margin-bottom:14px;text-transform:uppercase;}
 </style>
 </head>
 <body>
@@ -291,177 +287,131 @@ function getHistory(ticker){
 }
 
 // ════════════════════════════════════════════════════════════════
-// SVG CHARTS — 3-Panel VCP Layout (Minervini-optimiert)
+// SVG CHARTS — 4-Panel: Score + Vola + RSI + RelVol/Ratio
 // ════════════════════════════════════════════════════════════════
 function buildCharts(ticker){
   const hist=getHistory(ticker);
   if(hist.length<1)return`<div class="no-chart">Keine History.</div>`;
-  if(hist.length<2)return`<div class="no-chart" style="padding:16px;color:#444;font-size:11px;letter-spacing:1px">Nur 1 Datenpunkt – lade weitere Scans für Verlauf.</div>`;
+  if(hist.length<2)return`<div class="no-chart" style="padding:14px;color:#546e7a;font-size:11px;text-align:center">Nur 1 Datenpunkt – lade weitere Scans.</div>`;
 
-  const W=320,PL=34,PR=10,PT=10,PB=20;
+  const PL=26,PR=8,PT=6,PB=16;
   const N=hist.length;
-  const IW=W-PL-PR;
-  function px(i){return PL+i*(IW/(N-1||1));}
+  const spacing=Math.min(20,Math.max(12,(260-PL-PR)/(N-1||1)));
+  const W=PL+spacing*(N-1)+PR+18;
+
+  function px(i){return PL+i*spacing;}
   function py(v,mn,mx,H){const ih=H-PT-PB;if(mx===mn)return PT+ih/2;return PT+ih*(1-(v-mn)/(mx-mn));}
   function mm(arr){const v=arr.filter(x=>x!=null&&!isNaN(x));if(!v.length)return[0,1];return[Math.min(...v),Math.max(...v)];}
-  function pline(pts,col,sw=1.8,dash=""){return`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"${dash?` stroke-dasharray="${dash}"`:""}/>`;}
-  function dot(cx,cy,col,r=2.2){return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${col}" stroke="#000" stroke-width="0.8"/>`;}
-  function gridH(y){return`<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="#0f0f0f" stroke-width="1"/>`;}
-  function ylab(txt,y,col="#444",anchor="end",x=PL-3){return`<text x="${x}" y="${y}" font-size="7.5" fill="${col}" text-anchor="${anchor}" dominant-baseline="middle" font-family="inherit">${txt}</text>`;}
-  function xlab(txt,x,y){return`<text x="${x}" y="${y}" font-size="7" fill="#2e2e2e" text-anchor="middle" font-family="inherit">${txt}</text>`;}
-  function axisL(H){return`<line x1="${PL}" y1="${PT}" x2="${PL}" y2="${H-PB}" stroke="#1e1e1e" stroke-width="1"/>`;}
-  function chartLabel(txt,col,x,y){return`<text x="${x}" y="${y}" font-size="8" fill="${col}" font-weight="600" font-family="inherit">${txt}</text>`;}
+  function pl(pts,col,sw=1.5,dash=""){return`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"${dash?` stroke-dasharray="${dash}"`:""}/>`;}
+  function cr(cx,cy,col,r=2){return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${col}" stroke="rgba(0,0,0,.5)" stroke-width=".6"/>`;}
+  function gh(y,w){return`<line x1="${PL}" y1="${y}" x2="${w-PR}" y2="${y}" stroke="rgba(255,255,255,.04)" stroke-width="1"/>`;}
+  function yl(txt,y,col="#546e7a"){return`<text x="${PL-3}" y="${y}" font-size="6.5" fill="${col}" text-anchor="end" dominant-baseline="middle" font-family="inherit">${txt}</text>`;}
+  function xl(txt,x,y){return`<text x="${x}" y="${y}" font-size="6.5" fill="#37474f" text-anchor="middle" font-family="inherit">${txt}</text>`;}
+  function tag(txt,col,x,y){return`<text x="${x}" y="${y}" font-size="7" fill="${col}" font-weight="700" text-anchor="start" dominant-baseline="middle" font-family="inherit">${txt}</text>`;}
+  function svg(H,body){return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;overflow:visible">${body}</svg>`;}
+  function xlbls(H){return hist.map((h,i)=>xl(h.date.slice(5),px(i),(H-PB+12))).join("");}
+  function sec(title,s,leg=""){return`<div class="chart-section"><div class="chart-title" style="font-size:7px;margin-bottom:2px">${title}</div><div style="background:#0d1219;border:1px solid #1e2836;border-radius:3px;padding:4px 2px 1px;overflow:hidden">${s}</div>${leg?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;padding:0 2px">${leg}</div>`:""}</div>`;}
+  function ld(col,t){return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:8px;color:#546e7a"><span style="width:6px;height:6px;background:${col};border-radius:1px;display:inline-block"></span>${t}</span>`;}
+  function ll(col,t){return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:8px;color:#546e7a"><span style="width:10px;height:2px;background:${col};display:inline-block;border-radius:1px"></span>${t}</span>`;}
 
-  // ── CHART 1: Volatilität ATR% + Vola1W% (eigene %-Achse) ──
-  const H1=130;
-  const atrs=hist.map(h=>h.atr);
-  const v1ws=hist.map(h=>h.v1w);
-  const [vMin0,vMax0]=mm([...atrs,...v1ws]);
-  const vMin=Math.max(0,vMin0*0.88);
-  const vMax=vMax0*1.08;
-
-  // Schatten zwischen ATR (oben) und Vola1W (unten) = sichtbare Kontraktion
-  const atrTop=atrs.map((v,i)=>`${px(i).toFixed(1)},${py(v,vMin,vMax,H1).toFixed(1)}`).join(" ");
-  const v1wBot=[...v1ws].map((v,i)=>`${px(N-1-i).toFixed(1)},${py(v,vMin,vMax,H1).toFixed(1)}`).reverse().join(" ");
-  const shadow=`<polygon points="${atrTop} ${v1wBot}" fill="rgba(0,212,255,0.06)" stroke="none"/>`;
-
-  // Y-Achse mit echten %-Werten (4 Stufen)
-  const ySteps=[vMin,(vMin+vMax)/2,vMax].map(v=>{
-    const y=py(v,vMin,vMax,H1);
-    return gridH(y.toFixed(1))+ylab(v.toFixed(1)+"%",y.toFixed(1));
+  // ── 0: SCORE-VERLAUF ──────────────────────────────────────────
+  const H0=52;
+  const scores=hist.map(h=>h.score);
+  const [s0,s1]=mm([...scores]);
+  const sp=[Math.max(0,s0-8),Math.min(100,s1+8)];
+  const sPts=scores.map((v,i)=>`${px(i).toFixed(1)},${py(v,sp[0],sp[1],H0).toFixed(1)}`).join(" ");
+  const sArea=`<polygon points="${px(0).toFixed(1)},${(H0-PB).toFixed(1)} ${sPts} ${px(N-1).toFixed(1)},${(H0-PB).toFixed(1)}" fill="rgba(41,182,246,.06)"/>`;
+  const sDots=scores.map((v,i)=>{
+    const c=v>=80?"#00e87a":v>=60?"#ffd54f":v>=40?"#ffb74d":"#ef5350";
+    return cr(px(i).toFixed(1),py(v,sp[0],sp[1],H0).toFixed(1),c,2.5)+
+      `<text x="${px(i).toFixed(1)}" y="${(py(v,sp[0],sp[1],H0)-6).toFixed(1)}" font-size="7" fill="${c}" text-anchor="middle" font-weight="700" font-family="inherit">${v}</text>`;
+  }).join("");
+  // Ref-Linien bei 60 und 80
+  [60,80].forEach(()=>{}); // just for clarity
+  const sRefs=[60,80].map(v=>{
+    const y=py(v,sp[0],sp[1],H0);
+    return gh(y.toFixed(1),W)+yl(v,y.toFixed(1));
   }).join("");
 
-  const atrPts=atrs.map((v,i)=>`${px(i).toFixed(1)},${py(v,vMin,vMax,H1).toFixed(1)}`).join(" ");
-  const v1wPts=v1ws.map((v,i)=>`${px(i).toFixed(1)},${py(v,vMin,vMax,H1).toFixed(1)}`).join(" ");
-  const atrDots=atrs.map((v,i)=>dot(px(i).toFixed(1),py(v,vMin,vMax,H1).toFixed(1),"#00d4ff")).join("");
-  const v1wDots=v1ws.map((v,i)=>dot(px(i).toFixed(1),py(v,vMin,vMax,H1).toFixed(1),"#ff9944")).join("");
+  const svg0=svg(H0,`${sRefs}${sArea}${pl(sPts,"#29b6f6",2)}${sDots}${xlbls(H0)}`);
 
-  // Inline-Labels an letztem Punkt
-  const lastAtrY=py(atrs[N-1],vMin,vMax,H1);
-  const lastV1wY=py(v1ws[N-1],vMin,vMax,H1);
-  const inlineLbls=`
-    ${chartLabel("ATR","#00d4ff",W-PR+2,lastAtrY.toFixed(1))}
-    ${chartLabel("V1W","#ff9944",W-PR+2,(lastV1wY+9).toFixed(1))}`;
+  // ── 1: VOLATILITÄT ATR% + VOLA1W% ───────────────────────────
+  const H1=75;
+  const atrs=hist.map(h=>h.atr),v1ws=hist.map(h=>h.v1w);
+  const [v0,v1]=mm([...atrs,...v1ws]);
+  const vn=Math.max(0,v0*.9),vx=v1*1.06;
+  const aTop=atrs.map((v,i)=>`${px(i).toFixed(1)},${py(v,vn,vx,H1).toFixed(1)}`).join(" ");
+  const vBot=[...v1ws.keys()].reverse().map(i=>`${px(i).toFixed(1)},${py(v1ws[i],vn,vx,H1).toFixed(1)}`).join(" ");
+  const vGrid=[vn,(vn+vx)/2,vx].map(v=>gh(py(v,vn,vx,H1).toFixed(1),W)+yl(v.toFixed(1)+"%",py(v,vn,vx,H1).toFixed(1))).join("");
+  const aPts=atrs.map((v,i)=>`${px(i).toFixed(1)},${py(v,vn,vx,H1).toFixed(1)}`).join(" ");
+  const vPts=v1ws.map((v,i)=>`${px(i).toFixed(1)},${py(v,vn,vx,H1).toFixed(1)}`).join(" ");
+  const lAY=py(atrs[N-1],vn,vx,H1),lVY=py(v1ws[N-1],vn,vx,H1);
 
-  const xLbls1=hist.map((h,i)=>xlab(h.date.slice(5),px(i).toFixed(1),(H1-PB+13))).join("");
+  const svg1=svg(H1,`
+    ${vGrid}
+    <polygon points="${aTop} ${vBot}" fill="rgba(41,182,246,.06)"/>
+    ${pl(aPts,"#29b6f6",2)}
+    ${atrs.map((v,i)=>cr(px(i).toFixed(1),py(v,vn,vx,H1).toFixed(1),"#29b6f6")).join("")}
+    ${pl(vPts,"#ffb74d",2)}
+    ${v1ws.map((v,i)=>cr(px(i).toFixed(1),py(v,vn,vx,H1).toFixed(1),"#ffb74d")).join("")}
+    ${tag("ATR","#29b6f6",W-PR+2,lAY.toFixed(1))}
+    ${tag("V1W","#ffb74d",W-PR+2,(lVY+9).toFixed(1))}
+    ${xlbls(H1)}`);
 
-  const svg1=`<svg viewBox="0 0 ${W} ${H1}" style="width:100%;display:block;overflow:visible">
-    ${ySteps}${shadow}
-    ${pline(atrPts,"#00d4ff",2)}${atrDots}
-    ${pline(v1wPts,"#ff9944",2)}${v1wDots}
-    ${axisL(H1)}${inlineLbls}${xLbls1}
-  </svg>`;
-
-  // ── CHART 2: RSI kompakt als Area + Zonen ──
-  const H2=80;
+  // ── 2: RSI ───────────────────────────────────────────────────
+  const H2=52;
   const rsis=hist.map(h=>h.rsi);
-  const rMin=35,rMax=85; // feste, sinnvolle RSI-Achse
+  const rm=35,rM=85;
+  const z45=py(45,rm,rM,H2),z65=py(65,rm,rM,H2),z80=py(80,rm,rM,H2);
+  const rPts=rsis.map((v,i)=>`${px(i).toFixed(1)},${py(v,rm,rM,H2).toFixed(1)}`).join(" ");
+  const lRY=py(rsis[N-1],rm,rM,H2);
 
-  const z45=py(45,rMin,rMax,H2),z65=py(65,rMin,rMax,H2),z80=py(80,rMin,rMax,H2);
-  const zones=`
-    <rect x="${PL}" y="${PT}" width="${IW}" height="${(z80-PT).toFixed(1)}" fill="rgba(255,100,68,.05)"/>
-    <rect x="${PL}" y="${z80.toFixed(1)}" width="${IW}" height="${(z65-z80).toFixed(1)}" fill="rgba(245,197,24,.06)"/>
-    <rect x="${PL}" y="${z65.toFixed(1)}" width="${IW}" height="${(z45-z65).toFixed(1)}" fill="rgba(0,255,157,.07)"/>
-    <rect x="${PL}" y="${z45.toFixed(1)}" width="${IW}" height="${(H2-PB-z45).toFixed(1)}" fill="rgba(255,100,68,.05)"/>`;
-  const refLines=[{v:45,col:"rgba(255,100,68,.35)"},{v:65,col:"rgba(0,255,157,.4)"},{v:80,col:"rgba(245,197,24,.35)"}].map(({v,col})=>{
-    const y=py(v,rMin,rMax,H2);
-    return`<line x1="${PL}" y1="${y.toFixed(1)}" x2="${W-PR}" y2="${y.toFixed(1)}" stroke="${col}" stroke-width="0.7" stroke-dasharray="3,2"/>
-    ${ylab(v,y.toFixed(1))}`;
-  }).join("");
+  const svg2=svg(H2,`
+    <rect x="${PL}" y="${PT}" width="${W-PL-PR}" height="${(z80-PT).toFixed(1)}" fill="rgba(239,83,80,.04)"/>
+    <rect x="${PL}" y="${z80.toFixed(1)}" width="${W-PL-PR}" height="${(z65-z80).toFixed(1)}" fill="rgba(255,213,79,.05)"/>
+    <rect x="${PL}" y="${z65.toFixed(1)}" width="${W-PL-PR}" height="${(z45-z65).toFixed(1)}" fill="rgba(0,232,122,.06)"/>
+    <rect x="${PL}" y="${z45.toFixed(1)}" width="${W-PL-PR}" height="${(H2-PB-z45).toFixed(1)}" fill="rgba(239,83,80,.04)"/>
+    ${[{v:45,c:"rgba(239,83,80,.3)"},{v:65,c:"rgba(0,232,122,.4)"},{v:80,c:"rgba(255,213,79,.3)"}].map(({v,c})=>`<line x1="${PL}" y1="${py(v,rm,rM,H2).toFixed(1)}" x2="${W-PR}" y2="${py(v,rm,rM,H2).toFixed(1)}" stroke="${c}" stroke-width=".7" stroke-dasharray="3,2"/>${yl(v,py(v,rm,rM,H2).toFixed(1))}`).join("")}
+    <polygon points="${px(0).toFixed(1)},${(H2-PB).toFixed(1)} ${rPts} ${px(N-1).toFixed(1)},${(H2-PB).toFixed(1)}" fill="rgba(206,147,216,.07)"/>
+    ${pl(rPts,"#ce93d8",1.8)}
+    ${rsis.map((v,i)=>cr(px(i).toFixed(1),py(v,rm,rM,H2).toFixed(1),v>=45&&v<=65?"#00e87a":v<=80?"#ffd54f":"#ef5350",2.4)).join("")}
+    ${tag("RSI","#ce93d8",W-PR+2,lRY.toFixed(1))}
+    ${xlbls(H2)}`);
 
-  const rsiPts=rsis.map((v,i)=>`${px(i).toFixed(1)},${py(v,rMin,rMax,H2).toFixed(1)}`).join(" ");
-  const rsiArea=`<polygon points="${px(0).toFixed(1)},${(H2-PB).toFixed(1)} ${rsiPts} ${px(N-1).toFixed(1)},${(H2-PB).toFixed(1)}" fill="rgba(188,19,254,.08)" stroke="none"/>`;
-  const rsiDots=rsis.map((v,i)=>{
-    const col=v>=45&&v<=65?"#00ff9d":v>65&&v<=80?"#f5c518":"#ff6644";
-    return dot(px(i).toFixed(1),py(v,rMin,rMax,H2).toFixed(1),col,2.5);
-  }).join("");
-  const lastRsiY=py(rsis[N-1],rMin,rMax,H2);
-  const xLbls2=hist.map((h,i)=>xlab(h.date.slice(5),px(i).toFixed(1),(H2-PB+13))).join("");
-
-  const svg2=`<svg viewBox="0 0 ${W} ${H2}" style="width:100%;display:block;overflow:visible">
-    ${zones}${refLines}${rsiArea}
-    ${pline(rsiPts,"#bc13fe",1.8)}${rsiDots}
-    ${axisL(H2)}
-    ${chartLabel("RSI","#bc13fe",W-PR+2,lastRsiY.toFixed(1))}
-    ${xLbls2}
-  </svg>`;
-
-  // ── CHART 3: RelVol dünne Balken + Ratio Linie ──
-  const H3=85;
+  // ── 3: RelVol + Ratio ────────────────────────────────────────
+  const H3=55;
   const rvs=hist.map(h=>h.rv);
-  const rvMax=Math.max(...rvs,1.6);
-  const ratAll=hist.map(h=>h.ratio).filter(x=>x!=null);
-  const [ratMin,ratMax]=mm([...ratAll,0.85,1.25]);
-  // Balken sehr schmal — wie professionelle Trading-Charts
-  const bw=Math.max(2,Math.min(6,Math.floor(IW/N/2.5)));
-
+  const rvM=Math.max(...rvs,1.6);
+  const [rm2,rM2]=mm([...hist.map(h=>h.ratio).filter(Boolean),0.85,1.25]);
+  const bw=Math.max(3,Math.min(7,Math.floor(spacing/2.2)));
   const bars=rvs.map((v,i)=>{
-    const bh=(H3-PT-PB)*(Math.min(v,rvMax)/rvMax);
-    const x=px(i)-bw/2;
-    const y=H3-PB-bh;
-    const col=v<0.7?"#00ff9d":v<=1.2?"#f5c518":"#ff4444";
-    return`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" fill="${col}" opacity="${v<0.7?0.9:0.6}" rx="1"/>`;
+    const bh=(H3-PT-PB)*(Math.min(v,rvM)/rvM);
+    const c=v<0.7?"#00e87a":v<=1.2?"#ffd54f":"#ef5350";
+    return`<rect x="${(px(i)-bw/2).toFixed(1)}" y="${(H3-PB-bh).toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" fill="${c}" opacity="${v<0.7?.85:.55}" rx="1"/>`;
   }).join("");
+  const y10=(H3-PB-(H3-PT-PB)*(1/rvM));
+  const rPts3=hist.map((h,i)=>h.ratio?`${px(i).toFixed(1)},${py(h.ratio,rm2,rM2,H3).toFixed(1)}`:null).filter(Boolean).join(" ");
+  const y115=py(1.15,rm2,rM2,H3);
+  const lRat=hist[N-1].ratio;
 
-  const y10=H3-PB-((H3-PT-PB)*(1.0/rvMax));
-  const ref10=`<line x1="${PL}" y1="${y10.toFixed(1)}" x2="${W-PR}" y2="${y10.toFixed(1)}" stroke="rgba(255,255,255,.18)" stroke-width="1" stroke-dasharray="4,3"/>
-  ${ylab("1.0",y10.toFixed(1),"#444")}`;
-
-  const ratPts2=hist.map((h,i)=>h.ratio!=null?`${px(i).toFixed(1)},${py(h.ratio,ratMin,ratMax,H3).toFixed(1)}`:null).filter(Boolean).join(" ");
-  const y115=py(1.15,ratMin,ratMax,H3);
-  const ratRef=`<line x1="${PL}" y1="${y115.toFixed(1)}" x2="${W-PR}" y2="${y115.toFixed(1)}" stroke="rgba(0,212,255,.25)" stroke-width="0.8" stroke-dasharray="3,2"/>`;
-  const ratDots3=hist.map((h,i)=>{
-    if(h.ratio==null)return"";
-    const col=h.ratio>1.15?"#00ff9d":h.ratio>=1.0?"#f5c518":"#ff4444";
-    return dot(px(i).toFixed(1),py(h.ratio,ratMin,ratMax,H3).toFixed(1),col,2.5);
-  }).join("");
-  const lastRatY=hist[N-1].ratio!=null?py(hist[N-1].ratio,ratMin,ratMax,H3):PT;
-  const xLbls3=hist.map((h,i)=>xlab(h.date.slice(5),px(i).toFixed(1),(H3-PB+13))).join("");
-
-  const rvLabels=[0,rvMax].map(v=>{
-    const y=H3-PB-((H3-PT-PB)*(v/rvMax));
-    return ylab(v.toFixed(1),y.toFixed(1));
-  }).join("");
-
-  const svg3=`<svg viewBox="0 0 ${W} ${H3}" style="width:100%;display:block;overflow:visible">
-    ${gridH((H3-PB-(H3-PT-PB)*0.5).toFixed(1))}
-    ${bars}${ref10}${ratRef}
-    ${ratPts2?pline(ratPts2,"rgba(0,212,255,.75)",1.5):""}
-    ${ratDots3}
-    ${axisL(H3)}${rvLabels}
-    ${chartLabel("RV","#888",W-PR+2,(H3-PB).toFixed(1))}
-    ${chartLabel("Ratio","#00d4ff",W-PR+2,lastRatY.toFixed(1))}
-    ${xLbls3}
-  </svg>`;
-
-  // Score-Badges
-  const scoreRow=hist.map(h=>{
-    const col=h.score>=80?"#00ff9d":h.score>=60?"#f5c518":h.score>=40?"#ff9944":"#ff4444";
-    return`<div style="text-align:center;flex:1;min-width:0"><div style="color:${col};font-weight:700;font-size:12px;line-height:1">${h.score}</div><div style="color:#2a2a2a;font-size:7px;margin-top:2px">${h.date.slice(5)}</div></div>`;
-  }).join("");
-
-  const chartBox=(title,svg,extra="")=>`
-    <div class="chart-section">
-      <div class="chart-title" style="font-size:9px;letter-spacing:1.5px;color:#333;margin-bottom:5px">${title}</div>
-      <div style="background:#050505;border:1px solid #141414;border-radius:3px;padding:8px 2px 2px;overflow:hidden">${svg}</div>
-      ${extra}
-    </div>`;
+  const svg3=svg(H3,`
+    ${gh((H3-PB-(H3-PT-PB)*.5).toFixed(1),W)}
+    ${bars}
+    <line x1="${PL}" y1="${y10.toFixed(1)}" x2="${W-PR}" y2="${y10.toFixed(1)}" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-dasharray="4,3"/>
+    ${yl("1.0",y10.toFixed(1))}
+    <line x1="${PL}" y1="${y115.toFixed(1)}" x2="${W-PR}" y2="${y115.toFixed(1)}" stroke="rgba(41,182,246,.25)" stroke-width=".8" stroke-dasharray="3,2"/>
+    ${rPts3?pl(rPts3,"rgba(41,182,246,.8)",1.5):""}
+    ${hist.map((h,i)=>!h.ratio?"":cr(px(i).toFixed(1),py(h.ratio,rm2,rM2,H3).toFixed(1),h.ratio>1.15?"#00e87a":h.ratio>=1?"#ffd54f":"#ef5350",2.4)).join("")}
+    ${lRat?tag("Ratio","#29b6f6",W-PR+2,py(lRat,rm2,rM2,H3).toFixed(1)):""}
+    ${xlbls(H3)}`);
 
   return`
-    <div style="display:flex;gap:4px;margin-bottom:12px;padding:8px 10px;background:#080808;border:1px solid #141414;border-radius:4px;align-items:center">
-      <div style="font-size:8px;color:#2a2a2a;letter-spacing:1.5px;white-space:nowrap;margin-right:4px">SCORE</div>
-      ${scoreRow}
-    </div>
-    ${chartBox("VOLATILITÄT — ATR% (CYAN) · VOLA 1W% (ORANGE) · Schatten = Kontraktion",svg1)}
-    ${chartBox("RSI (14) — 🟢 45–65 SWEET SPOT · 🟡 65–80 MOMENTUM",svg2)}
-    ${chartBox("REL. VOLUMEN (Balken) · RATIO-LINIE (Cyan) · Ref. 1.15",svg3,`
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;padding:0 4px">
-        <div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#444"><div style="width:8px;height:8px;background:#00ff9d;border-radius:1px"></div>RV &lt;0.7 ✓</div>
-        <div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#444"><div style="width:8px;height:8px;background:#f5c518;border-radius:1px"></div>0.7–1.2</div>
-        <div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#444"><div style="width:8px;height:8px;background:#ff4444;border-radius:1px"></div>&gt;1.2 ⚠</div>
-        <div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#444"><div style="width:10px;height:2px;background:#00d4ff;border-radius:1px"></div>Ratio</div>
-      </div>`)}`;
+    ${sec("SCORE-VERLAUF",svg0)}
+    ${sec("VOLATILITÄT — ATR% · VOLA 1W%",svg1,ll("#29b6f6","ATR %")+ll("#ffb74d","Vola 1W %")+"<span style='color:#37474f;font-size:9px'>Schatten = Kontraktion</span>")}
+    ${sec("RSI (14)",svg2,ld("#00e87a","45–65 ✓")+ld("#ffd54f","65–80")+ld("#ef5350","außerhalb"))}
+    ${sec("REL. VOLUMEN · RATIO",svg3,ld("#00e87a","RV&lt;0.7")+ld("#ffd54f","0.7–1.2")+ld("#ef5350","&gt;1.2")+ll("#29b6f6","Ratio"))}`;
 }
+
 
 // ════════════════════════════════════════════════════════════════
 // STATE
@@ -552,9 +502,9 @@ function renderTop10(){
   const top10=scan.stocks.slice(0,10);
 
   function badge(val,pts,fmt,flag){
-    if(val==null)return`<td><span class="b-none">—</span></td>`;
-    const cls=badgeCls(pts);
-    return`<td><span class="${cls}">${fmt(val)}${flag?` <span class="warn">${flag}</span>`:""}<span class="pts"> (${pts})</span></span></td>`;
+    if(val==null)return`<td style="color:#37474f;font-size:9px;padding:5px 4px">—</td>`;
+    const col=pts>=20?"#00e87a":pts>=10?"#ffd54f":pts>0?"#ffb74d":"#546e7a";
+    return`<td style="padding:5px 4px"><span style="color:${col};font-size:9px;font-weight:600;white-space:nowrap">${fmt(val)}${flag?`<span style="font-size:7px"> ${flag}</span>`:""}</span></td>`;
   }
 
   let rows="";
@@ -563,28 +513,33 @@ function renderTop10(){
     const r=ratio(s);
     const open=expandedTicker===s.t;
     rows+=`<tr class="stock-row${open?" open":""}" onclick="toggleDetail('${s.t}')">
-      <td style="width:22px;color:#444;font-size:11px">${i+1}</td>
-      <td class="ticker">${s.t}</td>
-      <td><span class="score-big" style="color:${scoreColor(sc)}">${sc}</span><span class="score-max">/100</span></td>
-      ${badge(s.atr,pATR(s.atr),v=>v.toFixed(2)+"%","")}
-      ${badge(s.v1w,pV1W(s.v1w),v=>v.toFixed(2)+"%","")}
-      <td style="color:#444;font-size:11px">${s.v1m!=null?s.v1m.toFixed(2)+"%":"—"}</td>
-      ${badge(r,pRAT(r),v=>v.toFixed(3),r!=null&&r<1?"⚠️":"")}
+      <td style="width:10px;color:#37474f;font-size:8px;padding:5px 3px">${i+1}</td>
+      <td style="font-weight:700;font-size:12px;color:var(--blue);letter-spacing:.2px;padding:5px 5px;white-space:nowrap">${s.t}</td>
+      <td style="padding:5px 5px"><span style="font-weight:700;font-size:12px;color:${scoreColor(sc)}">${sc}</span></td>
+      ${badge(s.atr,pATR(s.atr),v=>v.toFixed(1)+"%","")}
+      ${badge(s.v1w,pV1W(s.v1w),v=>v.toFixed(1)+"%","")}
+      ${badge(r,pRAT(r),v=>v.toFixed(2),r!=null&&r<1?"⚠":"")}
       ${badge(s.rv,pRV(s.rv),v=>v.toFixed(2),"")}
-      ${badge(s.rsi,pRSI(s.rsi),v=>v.toFixed(1),"")}
-      <td style="text-align:center;font-size:13px">${s.cluster?"🔥":""}</td>
-      <td style="text-align:center"><span class="expand-arrow${open?" open":""}">▼</span></td>
+      ${badge(s.rsi,pRSI(s.rsi),v=>v.toFixed(0),"")}
+      <td style="text-align:center;font-size:9px;padding:5px 2px">${s.cluster?"🔥":""}</td>
+      <td style="text-align:center;padding:5px 3px;color:#37474f;font-size:8px">${open?"▲":"▼"}</td>
     </tr>
-    ${open?`<tr><td class="detail-td" colspan="11"><div class="detail-pane">${buildDetail(s,sc)}</div></td></tr>`:""}`;
+    ${open?`<tr><td class="detail-td" colspan="10"><div class="detail-pane">${buildDetail(s,sc)}</div></td></tr>`:""}`;
   });
 
-  el.innerHTML=`<div class="container" style="padding-bottom:0">
-    <table>
-      <thead><tr>
-        <th>#</th><th>TICKER</th><th>SCORE</th>
-        <th>ATR%</th><th>V1W%</th><th>V1M%</th>
-        <th>RATIO</th><th>RELVOL</th><th>RSI</th>
-        <th>CLU</th><th></th>
+  el.innerHTML=`<div style="padding:4px 6px 0">
+    <table style="font-size:9px">
+      <thead><tr style="background:#0a0e14">
+        <th style="padding:4px 3px;font-size:8px">#</th>
+        <th style="padding:4px 5px;font-size:8px">TICKER</th>
+        <th style="padding:4px 5px;font-size:8px">PTS</th>
+        <th style="font-size:8px">ATR</th>
+        <th style="font-size:8px">V1W</th>
+        <th style="font-size:8px">RATIO</th>
+        <th style="font-size:8px">RV</th>
+        <th style="font-size:8px">RSI</th>
+        <th style="padding:4px 2px"></th>
+        <th style="padding:4px 2px"></th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>
@@ -594,14 +549,27 @@ function renderTop10(){
 
 function buildDetail(s,sc){
   const hist=getHistory(s.t);
+  const r=ratio(s);
+  function statChip(lbl,val,col){
+    return`<div style="text-align:center;padding:3px 5px;background:#0a0e14;border:1px solid #1e2836;border-radius:3px;min-width:38px">
+      <div style="color:${col};font-size:10px;font-weight:700;line-height:1.2">${val}</div>
+      <div style="color:#37474f;font-size:7px;margin-top:1px">${lbl}</div>
+    </div>`;
+  }
+  const stats=`<div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:8px">
+    ${statChip("Score",sc,scoreColor(sc))}
+    ${statChip("ATR",s.atr?.toFixed(1)+"%",pATR(s.atr)>=20?"#00e87a":pATR(s.atr)>=12?"#ffd54f":"#ef5350")}
+    ${statChip("V1W",s.v1w?.toFixed(1)+"%",pV1W(s.v1w)>=20?"#00e87a":pV1W(s.v1w)>=12?"#ffd54f":"#ef5350")}
+    ${statChip("Ratio",r?.toFixed(2),pRAT(r)>=20?"#00e87a":pRAT(r)>=10?"#ffd54f":"#ef5350")}
+    ${statChip("RV",s.rv?.toFixed(2),pRV(s.rv)>=20?"#00e87a":pRV(s.rv)>=10?"#ffd54f":"#ef5350")}
+    ${statChip("RSI",s.rsi?.toFixed(0),pRSI(s.rsi)>=20?"#00e87a":pRSI(s.rsi)>=15?"#ffd54f":"#ef5350")}
+  </div>`;
   return`
-    <div class="d-header">
-      <div>
-        <div class="d-name">${s.t}</div>
-        <div class="d-meta">${s.sec||"—"} · ${hist.length} Scan${hist.length!==1?"s":""}</div>
-      </div>
-      <div class="d-score" style="color:${scoreColor(sc)}">${sc}<span style="font-size:13px;color:#333">/100</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-size:12px;font-weight:700;color:var(--blue)">${s.t} <span style="color:#37474f;font-size:8px;font-weight:400">${s.sec||""}</span></span>
+      <span style="color:#37474f;font-size:8px">${hist.length} Scan${hist.length!==1?"s":""}</span>
     </div>
+    ${stats}
     ${buildCharts(s.t)}`;
 }
 
@@ -619,19 +587,27 @@ function renderInfoCards(top10){
 
   const clHtml=clusters.length?clusters.map(([sec,tickers])=>{
     const icon=tickers.length>=3?"🔥":"🔶";
-    const col=tickers.length>=3?"#f5c518":"#ff9944";
-    return`<div class="cluster-row"><div style="display:flex;align-items:center;gap:5px"><span>${icon}</span><span style="color:${col};font-weight:700;font-size:12px">${sec}</span><span style="color:#333;font-size:9px;margin-left:auto">${tickers.length}×</span></div><div class="cluster-tickers">${tickers.join(" · ")}</div></div>`;
-  }).join(""):`<span style="color:#333;font-size:11px">Kein Cluster.</span>`;
+    const col=tickers.length>=3?"#ffd54f":"#ffb74d";
+    return`<div style="margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #1e2836">
+      <div style="display:flex;align-items:center;gap:4px"><span style="font-size:10px">${icon}</span><span style="color:${col};font-weight:700;font-size:10px">${sec}</span><span style="color:#37474f;font-size:8px;margin-left:auto">${tickers.length}×</span></div>
+      <div style="color:#546e7a;font-size:9px;margin-top:1px;padding-left:14px">${tickers.join(" · ")}</div>
+    </div>`;
+  }).join(""):`<span style="color:#37474f;font-size:9px">Kein Cluster.</span>`;
 
   const lsc=leader?score(leader):0;
-  const ldHtml=leader?`<div style="color:#00ff9d;font-weight:700;font-size:16px">${leader.t} — ${lsc} Pkt</div><div style="color:#333;font-size:10px;margin-top:5px;line-height:2">ATR ${leader.atr?.toFixed(2)}% · V1W ${leader.v1w?.toFixed(2)}%<br>Ratio ${ratio(leader)?.toFixed(3)} · RV ${leader.rv?.toFixed(2)} · RSI ${leader.rsi?.toFixed(1)}</div>`:"—";
+  const r=leader?ratio(leader):null;
+  const ldHtml=leader?`<div style="color:#00e87a;font-weight:700;font-size:13px">${leader.t} — ${lsc} Pkt</div>
+    <div style="color:#37474f;font-size:9px;margin-top:3px;line-height:1.8">
+      ATR ${leader.atr?.toFixed(2)}% · V1W ${leader.v1w?.toFixed(2)}%<br>
+      Ratio ${r?.toFixed(2)} · RV ${leader.rv?.toFixed(2)} · RSI ${leader.rsi?.toFixed(0)}
+    </div>`:"—";
 
-  const expHtml=expansions.length?expansions.map(s=>`<div style="color:#ff6677;margin-bottom:3px;font-size:12px">${s.t} <span style="color:#333">Ratio ${ratio(s)?.toFixed(3)}</span></div>`).join(""):`<span style="color:#333;font-size:11px">Keine.</span>`;
+  const expHtml=expansions.length?expansions.map(s=>`<div style="color:#ef5350;font-size:9px;margin-bottom:2px">${s.t} <span style="color:#37474f">Ratio ${ratio(s)?.toFixed(2)}</span></div>`).join(""):`<span style="color:#37474f;font-size:9px">Keine.</span>`;
 
-  return`<div class="container"><div class="cards">
-    <div class="card"><div class="card-title">SEKTOR-CLUSTER</div>${clHtml}</div>
-    <div class="card"><div class="card-title">ANFÜHRER</div>${ldHtml}</div>
-    <div class="card"><div class="card-title">VOLA-EXPANSIONEN ⚠️</div>${expHtml}</div>
+  return`<div style="padding:6px 6px 8px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px">
+    <div style="background:#0d1219;border:1px solid #1e2836;border-radius:5px;padding:9px"><div style="color:#37474f;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600">SEKTOR-CLUSTER</div>${clHtml}</div>
+    <div style="background:#0d1219;border:1px solid #1e2836;border-radius:5px;padding:9px"><div style="color:#37474f;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600">ANFÜHRER</div>${ldHtml}</div>
+    <div style="background:#0d1219;border:1px solid #1e2836;border-radius:5px;padding:9px"><div style="color:#37474f;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600">VOLA-EXPANSION</div>${expHtml}</div>
   </div></div>`;
 }
 
