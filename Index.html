@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VCP">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" id="pwa-manifest">
+<title>VCP Analyzer Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f1117;--bg2:#161b24;--bg3:#1c2230;
+  --border:#252d3a;--border2:#2e3847;
+  --green:#00e87a;--blue:#29b6f6;--purple:#ce93d8;
+  --yellow:#ffd54f;--orange:#ffb74d;--red:#ef5350;
+  --white:#f0f4ff;--g1:#b0bec5;--g2:#78909c;--g3:#546e7a;--g4:#2e3847;
+}
+body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;font-size:14px;}
+
+/* ── TOP NAV ── */
+.nav{display:flex;background:#0a0e14;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.nav-uni{display:flex;flex:1;border-right:1px solid var(--border);}
+.uni-btn{flex:1;padding:13px 6px;border:none;background:none;font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;color:var(--g3);border-bottom:2px solid transparent;font-family:inherit;}
+.uni-btn.soft.active{color:var(--green);border-bottom-color:var(--green);}
+.uni-btn.hard.active{color:var(--yellow);border-bottom-color:var(--yellow);}
+.nav-tabs{display:flex;flex:2;}
+.tab-btn{flex:1;padding:13px 4px;border:none;background:none;color:var(--g3);font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:inherit;}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green);}
+
+/* ── SCAN CHIPS ── */
+.scan-bar{background:#0a0e14;border-bottom:1px solid var(--border);padding:5px 12px;display:flex;gap:5px;overflow-x:auto;align-items:center;-webkit-overflow-scrolling:touch;}
+.scan-bar::-webkit-scrollbar{display:none;}
+.scan-lbl{color:var(--g3);font-size:9px;letter-spacing:1px;white-space:nowrap;font-weight:700;}
+.chip{padding:3px 9px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--g2);font-size:9px;cursor:pointer;white-space:nowrap;font-family:inherit;letter-spacing:.5px;}
+.chip.active{border-color:rgba(0,232,122,.35);background:rgba(0,232,122,.08);color:var(--green);font-weight:700;}
+.chip.active.hard{border-color:rgba(255,213,79,.35);background:rgba(255,213,79,.08);color:var(--yellow);}
+
+/* ── TABLE ── */
+.container{padding:8px;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;color:var(--g3);font-size:9px;padding:5px 7px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.5px;font-weight:500;}
+td{padding:7px 7px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr.stock-row{cursor:pointer;transition:background .1s;}
+tr.stock-row:hover td{background:rgba(255,255,255,.03);}
+tr.stock-row.open td{background:rgba(41,182,246,.04);}
+.ticker{font-weight:700;font-size:13px;color:var(--blue);letter-spacing:.5px;}
+.score-big{font-weight:700;font-size:13px;}
+.score-max{color:var(--g3);font-size:8px;margin-left:1px;}
+.badge{display:inline-flex;align-items:center;gap:2px;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:600;}
+.b-green{background:rgba(0,232,122,.1);border:1px solid rgba(0,232,122,.25);color:var(--green);}
+.b-yellow{background:rgba(255,213,79,.1);border:1px solid rgba(255,213,79,.25);color:var(--yellow);}
+.b-red{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.25);color:#ff6b6b;}
+.b-none{color:var(--g3);font-size:10px;}
+.pts{font-size:7px;opacity:.35;font-weight:400;}
+.warn{font-size:8px;}
+.expand-arrow{color:var(--g3);font-size:8px;transition:transform .2s;}
+.expand-arrow.open{transform:rotate(180deg);}
+
+/* ── DETAIL PANEL ── */
+.detail-td{padding:0!important;border-bottom:1px solid var(--border2)!important;}
+.detail-pane{background:#111620;padding:8px 10px;animation:fadeIn .2s ease;border-top:1px solid var(--border);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+.d-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.d-name{font-size:14px;font-weight:700;color:var(--blue);letter-spacing:.5px;}
+.d-score{font-size:16px;font-weight:700;}
+.d-meta{color:var(--g2);font-size:9px;margin-top:1px;}
+.chart-section{margin-bottom:6px;}
+.chart-title{color:var(--g2);font-size:8px;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;font-weight:600;}
+.no-chart{color:var(--g3);font-size:11px;padding:16px;text-align:center;}
+
+/* ── INFO CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;}
+.card{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:11px;}
+.card-title{color:var(--g3);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;font-weight:600;}
+.cluster-row{margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.cluster-tickers{color:var(--g2);font-size:10px;margin-top:2px;padding-left:16px;}
+
+/* ── UPLOAD ── */
+.upload-wrap{padding:16px;max-width:540px;}
+.upload-title{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--green);margin-bottom:16px;}
+.upload-title.hard{color:var(--yellow);}
+.field{margin-bottom:11px;}
+.field label{display:block;color:var(--g3);font-size:9px;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase;}
+.field input[type=date],.field input[type=text]{background:var(--bg2);border:1px solid var(--border2);color:var(--white);padding:8px 10px;border-radius:4px;font-size:12px;width:100%;outline:none;font-family:inherit;}
+.drop-zone{border:2px dashed var(--border2);border-radius:8px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg2);transition:all .2s;margin-bottom:11px;}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--green);background:rgba(0,232,122,.04);}
+.drop-zone.ready{border-color:rgba(0,232,122,.4);border-style:solid;}
+.drop-icon{font-size:28px;margin-bottom:7px;}
+.drop-main{color:var(--g1);font-size:12px;line-height:1.8;}
+.drop-main.ok{color:var(--green);font-weight:600;}
+.drop-sub{color:var(--g3);font-size:10px;margin-top:3px;}
+.preview{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:9px;margin-bottom:11px;}
+.preview-lbl{color:var(--g3);font-size:8px;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase;}
+.preview-txt{color:var(--g2);font-size:9px;white-space:pre;overflow-x:auto;line-height:1.6;max-height:80px;}
+.err{color:var(--red);font-size:10px;min-height:14px;margin-bottom:8px;}
+.btn-add{background:var(--green);color:#000;border:none;padding:10px 22px;border-radius:5px;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1.5px;font-family:inherit;transition:opacity .2s;}
+.btn-add.hard{background:var(--yellow);}
+.btn-add:disabled{opacity:.3;cursor:not-allowed;}
+details summary{color:var(--g3);font-size:9px;letter-spacing:1px;cursor:pointer;margin-top:13px;text-transform:uppercase;user-select:none;}
+textarea{background:var(--bg2);border:1px solid var(--border2);color:var(--white);padding:10px;border-radius:4px;font-size:10px;width:100%;resize:vertical;line-height:1.7;outline:none;margin-top:7px;font-family:'Courier New',monospace;}
+.schema{margin-top:16px;padding:12px;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;}
+.schema-ttl{color:var(--g3);font-size:8px;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;}
+.schema-row{display:flex;gap:10px;margin-bottom:3px;}
+.schema-k{color:rgba(0,232,122,.6);min-width:90px;font-size:10px;font-family:'Courier New',monospace;}
+.schema-v{color:var(--g2);font-size:10px;}
+
+/* ── COMPARE ── */
+.compare-wrap{padding:12px;overflow-x:auto;}
+.compare-ttl{color:var(--g3);font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+
+/* ── MANAGE ── */
+.manage-wrap{padding:16px;}
+.manage-ttl{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green);margin-bottom:13px;text-transform:uppercase;}
+.manage-ttl.hard{color:var(--yellow);}
+.scan-item{display:flex;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);gap:10px;}
+.scan-info{flex:1;min-width:0;}
+.scan-name{color:var(--white);font-weight:600;font-size:13px;}
+.scan-meta{color:var(--g2);font-size:10px;margin-top:2px;}
+.seed-tag{color:rgba(0,232,122,.3);font-size:8px;margin-left:6px;letter-spacing:1px;}
+.btn-view{padding:4px 10px;background:rgba(0,232,122,.08);border:1px solid rgba(0,232,122,.2);color:var(--green);border-radius:4px;cursor:pointer;font-size:9px;font-weight:700;font-family:inherit;}
+.btn-del{padding:4px 10px;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);color:var(--red);border-radius:4px;cursor:pointer;font-size:9px;font-weight:700;font-family:inherit;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:60px 20px;}
+.empty-icon{font-size:34px;margin-bottom:11px;}
+.empty-txt{color:var(--g3);font-size:12px;letter-spacing:1px;margin-bottom:14px;text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-uni">
+    <button class="uni-btn soft active" id="uni-soft" onclick="switchUni('soft')">🟢 SOFT</button>
+    <button class="uni-btn hard" id="uni-hard" onclick="switchUni('hard')">🟡 HARD</button>
+  </div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">🔥 TOP 10</button>
+    <button class="tab-btn" onclick="switchTab(1)">Δ CHART</button>
+    <button class="tab-btn" onclick="switchTab(2)">＋ SCAN</button>
+    <button class="tab-btn" onclick="switchTab(3)">⚙</button>
+  </div>
+</div>
+
+<!-- SCAN BAR -->
+<div class="scan-bar" id="scan-bar" style="display:none">
+  <span class="scan-lbl">SCAN</span>
+  <span id="scan-chips"></span>
+</div>
+
+<!-- TABS -->
+<div id="tab0"></div>
+<div id="tab1" style="display:none"></div>
+<div id="tab2" style="display:none"></div>
+<div id="tab3" style="display:none"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// SEED DATA
+// ════════════════════════════════════════════════════════════════
+const SOFT_SEEDS=[
+{id:1745625600000,date:"2026-04-26",label:"26.04 – Mi Soft",stocks:[
+{t:"MNST",atr:2.15,v1w:1.8989,v1m:2.0607,rv:0.9068,rsi:60.05,sec:"Verbrauchsgüter"},
+{t:"AAPL",atr:2.1696,v1w:1.9236,v1m:2.1532,rv:0.8792,rsi:59.70,sec:"Elektronische Technologie"},
+{t:"GOOGL",atr:2.2946,v1w:1.9774,v1m:2.2894,rv:1.2142,rsi:69.03,sec:"Technologie Dienstleistungen"},
+{t:"APH",atr:3.3349,v1w:2.5421,v1m:3.1671,rv:0.6145,rsi:62.00,sec:"Elektronische Technologie"},
+{t:"INDV",atr:3.851,v1w:2.8219,v1m:3.6193,rv:0.5988,rsi:57.86,sec:"Gesundheitstechnologie"},
+{t:"GOOG",atr:2.2286,v1w:1.9144,v1m:2.1903,rv:1.2557,rsi:69.66,sec:"Technologie Dienstleistungen"},
+{t:"TOL",atr:3.0601,v1w:2.4305,v1m:2.7157,rv:0.8329,rsi:56.88,sec:"Gebrauchsgüter"},
+{t:"AMX",atr:2.4248,v1w:2.0568,v1m:2.292,rv:1.5215,rsi:61.35,sec:"Kommunikation"},
+{t:"CF",atr:5.5892,v1w:4.1715,v1m:4.8627,rv:0.7967,rsi:49.48,sec:"Verarbeitende Industrie"},
+{t:"SBS",atr:2.6399,v1w:2.3049,v1m:2.2546,rv:0.8656,rsi:67.22,sec:"Versorgungseinrichtungen"},
+{t:"RRC",atr:3.5535,v1w:3.2271,v1m:3.4148,rv:0.8989,rsi:48.71,sec:"Energetische Mineralien"},
+{t:"MLI",atr:2.8877,v1w:4.2648,v1m:2.8826,rv:0.4835,rsi:74.30,sec:"Hersteller Produktion"},
+{t:"MU",atr:5.2295,v1w:5.1668,v1m:5.9631,rv:0.9378,rsi:68.89,sec:"Elektronische Technologie"},
+{t:"ADEA",atr:3.2383,v1w:3.1731,v1m:3.5651,rv:0.8819,rsi:77.01,sec:"Technologie Dienstleistungen"},
+{t:"ANET",atr:3.6035,v1w:3.7775,v1m:4.043,rv:1.0173,rsi:74.23,sec:"Elektronische Technologie"},
+{t:"AUPH",atr:3.1773,v1w:2.9881,v1m:3.1473,rv:1.3046,rsi:57.06,sec:"Gesundheitstechnologie"},
+{t:"VIK",atr:4.3449,v1w:4.1857,v1m:4.019,rv:0.5833,rsi:57.48,sec:"Verbraucherdienste"},
+{t:"ASML",atr:3.992,v1w:3.477,v1m:3.2503,rv:0.8528,rsi:54.74,sec:"Elektronische Technologie"},
+{t:"AVGO",atr:3.0216,v1w:3.2356,v1m:3.0205,rv:1.0044,rsi:77.78,sec:"Elektronische Technologie"},
+{t:"STX",atr:4.7244,v1w:4.7552,v1m:5.4068,rv:0.8148,rsi:75.34,sec:"Elektronische Technologie"},
+{t:"NVDA",atr:2.6167,v1w:2.9516,v1m:2.5977,rv:1.5478,rsi:71.50,sec:"Elektronische Technologie"},
+{t:"TSM",atr:3.291,v1w:3.0438,v1m:3.039,rv:1.4859,rsi:68.32,sec:"Elektronische Technologie"},
+{t:"LRCX",atr:4.4174,v1w:3.9758,v1m:4.183,rv:1.3695,rsi:61.20,sec:"Hersteller Produktion"},
+{t:"MYCR",atr:2.9587,v1w:3.5953,v1m:3.0359,rv:2.2221,rsi:87.01,sec:"Hersteller Produktion"}
+]},
+{id:1745712000000,date:"2026-04-27",label:"27.04 – Mo Soft",stocks:[
+{t:"MNST",atr:2.15,v1w:1.8989,v1m:2.0607,rv:0.9068,rsi:60.05,sec:"Verbrauchsgüter"},
+{t:"AAPL",atr:2.1696,v1w:1.9236,v1m:2.1532,rv:0.8792,rsi:59.70,sec:"Elektronische Technologie"},
+{t:"GOOGL",atr:2.2946,v1w:1.9774,v1m:2.2894,rv:1.2142,rsi:69.03,sec:"Technologie Dienstleistungen"},
+{t:"APH",atr:3.3349,v1w:2.5421,v1m:3.1671,rv:0.6145,rsi:62.00,sec:"Elektronische Technologie"},
+{t:"INDV",atr:3.851,v1w:2.8219,v1m:3.6193,rv:0.5988,rsi:57.86,sec:"Gesundheitstechnologie"},
+{t:"GOOG",atr:2.2286,v1w:1.9144,v1m:2.1903,rv:1.2557,rsi:69.66,sec:"Technologie Dienstleistungen"},
+{t:"TOL",atr:3.0601,v1w:2.4305,v1m:2.7157,rv:0.8329,rsi:56.88,sec:"Gebrauchsgüter"},
+{t:"AMX",atr:2.4248,v1w:2.0568,v1m:2.292,rv:1.5215,rsi:61.35,sec:"Kommunikation"},
+{t:"CF",atr:5.5892,v1w:4.1715,v1m:4.8627,rv:0.7967,rsi:49.48,sec:"Verarbeitende Industrie"},
+{t:"SBS",atr:2.6399,v1w:2.3049,v1m:2.2546,rv:0.8656,rsi:67.22,sec:"Versorgungseinrichtungen"},
+{t:"RRC",atr:3.5535,v1w:3.2271,v1m:3.4148,rv:0.8989,rsi:48.71,sec:"Energetische Mineralien"},
+{t:"MLI",atr:2.8877,v1w:4.2648,v1m:2.8826,rv:0.4835,rsi:74.30,sec:"Hersteller Produktion"},
+{t:"ADEA",atr:3.2383,v1w:3.1731,v1m:3.5651,rv:0.8819,rsi:77.01,sec:"Technologie Dienstleistungen"},
+{t:"ANET",atr:3.6035,v1w:3.7775,v1m:4.043,rv:1.0173,rsi:74.23,sec:"Elektronische Technologie"},
+{t:"AUPH",atr:3.1773,v1w:2.9881,v1m:3.1473,rv:1.3046,rsi:57.06,sec:"Gesundheitstechnologie"},
+{t:"VIK",atr:4.3449,v1w:4.1857,v1m:4.019,rv:0.5833,rsi:57.48,sec:"Verbraucherdienste"},
+{t:"ASML",atr:3.992,v1w:3.477,v1m:3.2503,rv:0.8528,rsi:54.74,sec:"Elektronische Technologie"},
+{t:"AVGO",atr:3.0216,v1w:3.2356,v1m:3.0205,rv:1.0044,rsi:77.78,sec:"Elektronische Technologie"},
+{t:"STX",atr:4.7244,v1w:4.7552,v1m:5.4068,rv:0.8148,rsi:75.34,sec:"Elektronische Technologie"},
+{t:"NVDA",atr:2.6167,v1w:2.9516,v1m:2.5977,rv:1.5478,rsi:71.50,sec:"Elektronische Technologie"},
+{t:"TSM",atr:3.291,v1w:3.0438,v1m:3.039,rv:1.4859,rsi:68.32,sec:"Elektronische Technologie"},
+{t:"LRCX",atr:4.4174,v1w:3.9758,v1m:4.183,rv:1.3695,rsi:61.20,sec:"Hersteller Produktion"}
+]}
+];
+const HARD_SEEDS=[];
+const SOFT_SEED_IDS=new Set(SOFT_SEEDS.map(s=>s.id));
+const HARD_SEED_IDS=new Set();
+
+// ════════════════════════════════════════════════════════════════
+// SCORING — 100 Punkte System
+// ════════════════════════════════════════════════════════════════
+function ratio(s){return s.ratio??(s.v1m&&s.v1w?s.v1m/s.v1w:null);}
+function pATR(v){if(v==null)return 0;if(v<2.5)return 20;if(v<=3.2)return 12;if(v<=4.0)return 8;return 0;}
+function pV1W(v){if(v==null)return 0;if(v<2.0)return 20;if(v<=2.5)return 12;return 0;}
+function pRAT(v){if(v==null)return 0;if(v>1.15)return 20;if(v>=1.0)return 10;return 0;}
+function pRV(v){if(v==null)return 0;if(v<0.7)return 20;if(v<=1.2)return 10;return 0;}
+function pRSI(v){if(v==null)return 0;if(v>=45&&v<=65)return 20;if(v>65&&v<=80)return 15;return 0;}
+function score(s){
+  const r=ratio(s);
+  return pATR(s.atr)+pV1W(s.v1w)+pRAT(r)+pRV(s.rv)+pRSI(s.rsi);
+}
+function scoreColor(n){if(n>=80)return"#00ff9d";if(n>=60)return"#f5c518";if(n>=40)return"#ff9944";return"#ff4444";}
+function badgeCls(pts){const p=pts/20;if(p>=0.9)return"badge b-green";if(p>=0.5)return"badge b-yellow";return"badge b-red";}
+
+// ════════════════════════════════════════════════════════════════
+// CSV PARSER — erkennt echte TradingView-Header automatisch
+// ════════════════════════════════════════════════════════════════
+function parseCSV(text){
+  function splitLine(line){
+    const r=[];let c="";let q=false;
+    for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c.trim());c="";}else c+=ch;}
+    r.push(c.trim());return r;
+  }
+  const lines=text.trim().split(/\r?\n/);
+  if(lines.length<2)return[];
+  const hdrs=splitLine(lines[0]).map(h=>h.replace(/^"|"$/g,"").trim().toLowerCase());
+  return lines.slice(1).map(line=>{
+    const cols=splitLine(line);
+    const row={};hdrs.forEach((h,i)=>{row[h]=(cols[i]||"").replace(/^"|"$/g,"").trim();});
+    const n=(...keys)=>{for(const k of keys){if(row[k]!==undefined){const v=parseFloat(row[k]);if(!isNaN(v))return v;}const fk=Object.keys(row).find(rk=>rk.includes(k));if(fk){const v=parseFloat(row[fk]);if(!isNaN(v))return v;}}return null;};
+    const atr=n("atr","average true range % (14) 1 tag","average true range");
+    const v1w=n("vola1w","v1w","volatilität 1 woche","volatilitat 1 woche","vola 1w");
+    const v1m=n("vola1m","v1m","volatilität 1 monat","volatilitat 1 monat","vola 1m");
+    const rv=n("relvol","rv","relatives volumen 1 tag","relatives volumen","rel vol");
+    const rsi=n("rsi","relative strength index (14) 1 tag","relative strength index");
+    const rat=n("ratio")??(v1m&&v1w?v1m/v1w:null);
+    const t=(row.ticker||row.symbol||"").toUpperCase();
+    const sec=row.sector||row.sektor||row.branche||"";
+    if(!t)return null;
+    return{t,atr,v1w,v1m,ratio:rat,rv,rsi,sec};
+  }).filter(Boolean);
+}
+
+function buildScan(date,label,raw,time=""){
+  const stocks=raw.map(s=>({...s,ratio:s.ratio??(s.v1m&&s.v1w?s.v1m/s.v1w:null)}));
+  stocks.sort((a,b)=>score(b)-score(a));
+  const top=stocks.slice(0,10);
+  const map={};top.forEach(s=>{if(s.sec)map[s.sec]=(map[s.sec]||[]).concat(s.t);});
+  const cs=new Set(Object.entries(map).filter(([,v])=>v.length>=3).map(([k])=>k));
+  stocks.forEach(s=>s.cluster=cs.has(s.sec));
+  return{id:Date.now()+Math.floor(Math.random()*9999),date,time,label:label||date,stocks};
+}
+
+// ════════════════════════════════════════════════════════════════
+// HISTORY — alle Datenpunkte eines Tickers über alle Scans
+// ════════════════════════════════════════════════════════════════
+function getHistory(ticker){
+  const raw=U().scans.map(sc=>{
+    const s=sc.stocks.find(x=>x.t===ticker);
+    if(!s)return null;
+    const r=ratio(s);
+    return{date:sc.date,label:sc.label,atr:s.atr,v1w:s.v1w,rsi:s.rsi,rv:s.rv,ratio:r,score:score(s)};
+  }).filter(Boolean).sort((a,b)=>a.date.localeCompare(b.date));
+  // Pro Datum nur einen Eintrag — letzter Scan des Tages
+  const byDate={};
+  raw.forEach(h=>{byDate[h.date]=h;});
+  return Object.values(byDate).sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+// ════════════════════════════════════════════════════════════════
+// SVG CHARTS — 4-Panel: Score + Vola + RSI + RelVol/Ratio
+// ════════════════════════════════════════════════════════════════
+function buildCharts(ticker){
+  const hist=getHistory(ticker);
+  if(hist.length<1)return`<div class="no-chart">Keine History.</div>`;
+  if(hist.length<2)return`<div class="no-chart" style="padding:14px;color:#546e7a;font-size:11px;text-align:center">Nur 1 Datenpunkt – lade weitere Scans.</div>`;
+
+  const PL=26,PR=8,PT=6,PB=16;
+  const N=hist.length;
+  const spacing=Math.min(20,Math.max(12,(260-PL-PR)/(N-1||1)));
+  const W=PL+spacing*(N-1)+PR+18;
+
+  function px(i){return PL+i*spacing;}
+  function py(v,mn,mx,H){const ih=H-PT-PB;if(mx===mn)return PT+ih/2;return PT+ih*(1-(v-mn)/(mx-mn));}
+  function mm(arr){const v=arr.filter(x=>x!=null&&!isNaN(x));if(!v.length)return[0,1];return[Math.min(...v),Math.max(...v)];}
+  function pl(pts,col,sw=1.5,dash=""){return`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"${dash?` stroke-dasharray="${dash}"`:""}/>`;}
+  function cr(cx,cy,col,r=2){return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${col}" stroke="rgba(0,0,0,.5)" stroke-width=".6"/>`;}
+  function gh(y,w){return`<line x1="${PL}" y1="${y}" x2="${w-PR}" y2="${y}" stroke="rgba(255,255,255,.04)" stroke-width="1"/>`;}
+  function yl(txt,y,col="#546e7a"){return`<text x="${PL-3}" y="${y}" font-size="6.5" fill="${col}" text-anchor="end" dominant-baseline="middle" font-family="inherit">${txt}</text>`;}
+  function xl(txt,x,y){return`<text x="${x}" y="${y}" font-size="6.5" fill="#37474f" text-anchor="middle" font-family="inherit">${txt}</text>`;}
+  function tag(txt,col,x,y){return`<text x="${x}" y="${y}" font-size="7" fill="${col}" font-weight="700" text-anchor="start" dominant-baseline="middle" font-family="inherit">${txt}</text>`;}
+  function svg(H,body){return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;overflow:visible">${body}</svg>`;}
+  function xlbls(H){return hist.map((h,i)=>xl(h.date.slice(5),px(i),(H-PB+12))).join("");}
+  function sec(title,s,leg=""){return`<div class="chart-section"><div class="chart-title" style="font-size:7px;margin-bottom:2px">${title}</div><div style="background:#0d1219;border:1px solid #1e2836;border-radius:3px;padding:4px 2px 1px;overflow:hidden">${s}</div>${leg?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;padding:0 2px">${leg}</div>`:""}</div>`;}
+  function ld(col,t){return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:8px;color:#546e7a"><span style="width:6px;height:6px;background:${col};border-radius:1px;display:inline-block"></span>${t}</span>`;}
+  function ll(col,t){return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:8px;color:#546e7a"><span style="width:10px;height:2px;background:${col};display:inline-block;border-radius:1px"></span>${t}</span>`;}
+
+  // ── 0: SCORE-VERLAUF ──────────────────────────────────────────
+  const H0=52;
+  const scores=hist.map(h=>h.score);
+  const [s0,s1]=mm([...scores]);
+  const sp=[Math.max(0,s0-8),Math.min(100,s1+8)];
+  const sPts=scores.map((v,i)=>`${px(i).toFixed(1)},${py(v,sp[0],sp[1],H0).toFixed(1)}`).join(" ");
+  const sArea=`<polygon points="${px(0).toFixed(1)},${(H0-PB).toFixed(1)} ${sPts} ${px(N-1).toFixed(1)},${(H0-PB).toFixed(1)}" fill="rgba(41,182,246,.06)"/>`;
+  const sDots=scores.map((v,i)=>{
+    const c=v>=80?"#00e87a":v>=60?"#ffd54f":v>=40?"#ffb74d":"#ef5350";
+    return cr(px(i).toFixed(1),py(v,sp[0],sp[1],H0).toFixed(1),c,2.5)+
+      `<text x="${px(i).toFixed(1)}" y="${(py(v,sp[0],sp[1],H0)-6).toFixed(1)}" font-size="7" fill="${c}" text-anchor="middle" font-weight="700" font-family="inherit">${v}</text>`;
+  }).join("");
+  // Ref-Linien bei 60 und 80
+  [60,80].forEach(()=>{}); // just for clarity
+  const sRefs=[60,80].map(v=>{
+    const y=py(v,sp[0],sp[1],H0);
+    return gh(y.toFixed(1),W)+yl(v,y.toFixed(1));
+  }).join("");
+
+  const svg0=svg(H0,`${sRefs}${sArea}${pl(sPts,"#29b6f6",2)}${sDots}${xlbls(H0)}`);
+
+  // ── 1: VOLATILITÄT ATR% + VOLA1W% ───────────────────────────
+  const H1=75;
+  const atrs=hist.map(h=>h.atr),v1ws=hist.map(h=>h.v1w);
+  const [v0,v1]=mm([...atrs,...v1ws]);
+  const vn=Math.max(0,v0*.9),vx=v1*1.06;
+  const aTop=atrs.map((v,i)=>`${px(i).toFixed(1)},${py(v,vn,vx,H1).toFixed(1)}`).join(" ");
+  const vBot=[...v1ws.keys()].reverse().map(i=>`${px(i).toFixed(1)},${py(v1ws[i],vn,vx,H1).toFixed(1)}`).join(" ");
+  const vGrid=[vn,(vn+vx)/2,vx].map(v=>gh(py(v,vn,vx,H1).toFixed(1),W)+yl(v.toFixed(1)+"%",py(v,vn,vx,H1).toFixed(1))).join("");
+  const aPts=atrs.map((v,i)=>`${px(i).toFixed(1)},${py(v,vn,vx,H1).toFixed(1)}`).join(" ");
+  const vPts=v1ws.map((v,i)=>`${px(i).toFixed(1)},${py(v,vn,vx,H1).toFixed(1)}`).join(" ");
+  const lAY=py(atrs[N-1],vn,vx,H1),lVY=py(v1ws[N-1],vn,vx,H1);
+
+  const svg1=svg(H1,`
+    ${vGrid}
+    <polygon points="${aTop} ${vBot}" fill="rgba(41,182,246,.06)"/>
+    ${pl(aPts,"#29b6f6",2)}
+    ${atrs.map((v,i)=>cr(px(i).toFixed(1),py(v,vn,vx,H1).toFixed(1),"#29b6f6")).join("")}
+    ${pl(vPts,"#ffb74d",2)}
+    ${v1ws.map((v,i)=>cr(px(i).toFixed(1),py(v,vn,vx,H1).toFixed(1),"#ffb74d")).join("")}
+    ${tag("ATR","#29b6f6",W-PR+2,lAY.toFixed(1))}
+    ${tag("V1W","#ffb74d",W-PR+2,(lVY+9).toFixed(1))}
+    ${xlbls(H1)}`);
+
+  // ── 2: RSI ───────────────────────────────────────────────────
+  const H2=52;
+  const rsis=hist.map(h=>h.rsi);
+  const rm=35,rM=85;
+  const z45=py(45,rm,rM,H2),z65=py(65,rm,rM,H2),z80=py(80,rm,rM,H2);
+  const rPts=rsis.map((v,i)=>`${px(i).toFixed(1)},${py(v,rm,rM,H2).toFixed(1)}`).join(" ");
+  const lRY=py(rsis[N-1],rm,rM,H2);
+
+  const svg2=svg(H2,`
+    <rect x="${PL}" y="${PT}" width="${W-PL-PR}" height="${(z80-PT).toFixed(1)}" fill="rgba(239,83,80,.04)"/>
+    <rect x="${PL}" y="${z80.toFixed(1)}" width="${W-PL-PR}" height="${(z65-z80).toFixed(1)}" fill="rgba(255,213,79,.05)"/>
+    <rect x="${PL}" y="${z65.toFixed(1)}" width="${W-PL-PR}" height="${(z45-z65).toFixed(1)}" fill="rgba(0,232,122,.06)"/>
+    <rect x="${PL}" y="${z45.toFixed(1)}" width="${W-PL-PR}" height="${(H2-PB-z45).toFixed(1)}" fill="rgba(239,83,80,.04)"/>
+    ${[{v:45,c:"rgba(239,83,80,.3)"},{v:65,c:"rgba(0,232,122,.4)"},{v:80,c:"rgba(255,213,79,.3)"}].map(({v,c})=>`<line x1="${PL}" y1="${py(v,rm,rM,H2).toFixed(1)}" x2="${W-PR}" y2="${py(v,rm,rM,H2).toFixed(1)}" stroke="${c}" stroke-width=".7" stroke-dasharray="3,2"/>${yl(v,py(v,rm,rM,H2).toFixed(1))}`).join("")}
+    <polygon points="${px(0).toFixed(1)},${(H2-PB).toFixed(1)} ${rPts} ${px(N-1).toFixed(1)},${(H2-PB).toFixed(1)}" fill="rgba(206,147,216,.07)"/>
+    ${pl(rPts,"#ce93d8",1.8)}
+    ${rsis.map((v,i)=>cr(px(i).toFixed(1),py(v,rm,rM,H2).toFixed(1),v>=45&&v<=65?"#00e87a":v<=80?"#ffd54f":"#ef5350",2.4)).join("")}
+    ${tag("RSI","#ce93d8",W-PR+2,lRY.toFixed(1))}
+    ${xlbls(H2)}`);
+
+  // ── 3: RelVol + Ratio ────────────────────────────────────────
+  const H3=55;
+  const rvs=hist.map(h=>h.rv);
+  const rvM=Math.max(...rvs,1.6);
+  const [rm2,rM2]=mm([...hist.map(h=>h.ratio).filter(Boolean),0.85,1.25]);
+  const bw=Math.max(3,Math.min(7,Math.floor(spacing/2.2)));
+  const bars=rvs.map((v,i)=>{
+    const bh=(H3-PT-PB)*(Math.min(v,rvM)/rvM);
+    const c=v<0.7?"#00e87a":v<=1.2?"#ffd54f":"#ef5350";
+    return`<rect x="${(px(i)-bw/2).toFixed(1)}" y="${(H3-PB-bh).toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" fill="${c}" opacity="${v<0.7?.85:.55}" rx="1"/>`;
+  }).join("");
+  const y10=(H3-PB-(H3-PT-PB)*(1/rvM));
+  const rPts3=hist.map((h,i)=>h.ratio?`${px(i).toFixed(1)},${py(h.ratio,rm2,rM2,H3).toFixed(1)}`:null).filter(Boolean).join(" ");
+  const y115=py(1.15,rm2,rM2,H3);
+  const lRat=hist[N-1].ratio;
+
+  const svg3=svg(H3,`
+    ${gh((H3-PB-(H3-PT-PB)*.5).toFixed(1),W)}
+    ${bars}
+    <line x1="${PL}" y1="${y10.toFixed(1)}" x2="${W-PR}" y2="${y10.toFixed(1)}" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-dasharray="4,3"/>
+    ${yl("1.0",y10.toFixed(1))}
+    <line x1="${PL}" y1="${y115.toFixed(1)}" x2="${W-PR}" y2="${y115.toFixed(1)}" stroke="rgba(41,182,246,.25)" stroke-width=".8" stroke-dasharray="3,2"/>
+    ${rPts3?pl(rPts3,"rgba(41,182,246,.8)",1.5):""}
+    ${hist.map((h,i)=>!h.ratio?"":cr(px(i).toFixed(1),py(h.ratio,rm2,rM2,H3).toFixed(1),h.ratio>1.15?"#00e87a":h.ratio>=1?"#ffd54f":"#ef5350",2.4)).join("")}
+    ${lRat?tag("Ratio","#29b6f6",W-PR+2,py(lRat,rm2,rM2,H3).toFixed(1)):""}
+    ${xlbls(H3)}`);
+
+  return`
+    ${sec("SCORE-VERLAUF",svg0)}
+    ${sec("VOLATILITÄT — ATR% · VOLA 1W%",svg1,ll("#29b6f6","ATR %")+ll("#ffb74d","Vola 1W %")+"<span style='color:#37474f;font-size:9px'>Schatten = Kontraktion</span>")}
+    ${sec("RSI (14)",svg2,ld("#00e87a","45–65 ✓")+ld("#ffd54f","65–80")+ld("#ef5350","außerhalb"))}
+    ${sec("REL. VOLUMEN · RATIO",svg3,ld("#00e87a","RV&lt;0.7")+ld("#ffd54f","0.7–1.2")+ld("#ef5350","&gt;1.2")+ll("#29b6f6","Ratio"))}`;
+}
+
+
+// ════════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════════
+let uni="soft",curTab=0,expandedTicker=null;
+const state={
+  soft:{scans:[],sel:0,key:"vcp-soft-v3",seeds:SOFT_SEEDS,seedIds:SOFT_SEED_IDS,
+        form:{date:new Date().toISOString().slice(0,10),label:"",csv:"",file:""}},
+  hard:{scans:[],sel:0,key:"vcp-hard-v3",seeds:HARD_SEEDS,seedIds:HARD_SEED_IDS,
+        form:{date:new Date().toISOString().slice(0,10),label:"",csv:"",file:""}}
+};
+function U(){return state[uni];}
+
+// ════════════════════════════════════════════════════════════════
+// STORAGE
+// ════════════════════════════════════════════════════════════════
+function loadAll(){
+  ["soft","hard"].forEach(u=>{
+    const st=state[u];
+    try{
+      const raw=localStorage.getItem(st.key);
+      if(raw){
+        const saved=JSON.parse(raw);
+        const ids=new Set(saved.map(s=>s.id));
+        st.scans=[...st.seeds.filter(s=>!ids.has(s.id)),...saved];
+      }else{st.scans=[...st.seeds];localStorage.setItem(st.key,JSON.stringify(st.scans));}
+    }catch(e){st.scans=[...st.seeds];}
+  });
+  setDot(true);
+}
+function saveU(){try{localStorage.setItem(U().key,JSON.stringify(U().scans));setDot(true);}catch(e){setDot(false);}}
+function setDot(ok){
+  const d=document.getElementById("dot"),l=document.getElementById("dot-lbl");
+  if(!d)return;
+  d.style.background=ok?"#00ff9d":"#ff4444";
+  d.style.boxShadow=ok?"0 0 5px #00ff9d":"0 0 5px #ff4444";
+  l.style.color=ok?"rgba(0,255,157,.5)":"rgba(255,68,68,.5)";
+  l.textContent=ok?"STORAGE OK":"OFFLINE";
+}
+
+// ════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════════════
+function switchUni(u){
+  uni=u;expandedTicker=null;
+  ["soft","hard"].forEach(x=>{document.getElementById("uni-"+x).classList.toggle("active",x===u);});
+  document.querySelectorAll(".tab-btn").forEach(b=>b.style.color=u==="hard"?"":""/*let CSS handle*/);
+  render();
+}
+function switchTab(i){
+  curTab=i;expandedTicker=null;
+  document.querySelectorAll(".tab-btn").forEach((b,j)=>b.classList.toggle("active",i===j));
+  [0,1,2,3].forEach(j=>document.getElementById("tab"+j).style.display=i===j?"block":"none");
+  const bar=document.getElementById("scan-bar");
+  bar.style.display=(i===0||i===1)&&U().scans.length?"flex":"none";
+  render();
+}
+function renderChips(){
+  const st=U();
+  const bar=document.getElementById("scan-bar");
+  if(!st.scans.length||curTab===2||curTab===3){bar.style.display="none";return;}
+  bar.style.display="flex";
+
+  const cur=st.scans[st.sel];
+  const label=cur?`${cur.date.slice(5)}${cur.time?" "+cur.time:""}  ▾`:"Scan wählen ▾";
+  const acol=uni==="hard"?"#ffd54f":"#00e87a";
+
+  // Dropdown-Button + verstecktes Select
+  document.getElementById("scan-chips").innerHTML=`
+    <div style="position:relative;display:inline-block">
+      <button id="scan-dd-btn" onclick="toggleScanDD()" style="
+        display:flex;align-items:center;gap:6px;
+        background:#0d1219;border:1px solid #1e2836;border-radius:4px;
+        padding:3px 9px;cursor:pointer;font-family:inherit;
+        font-size:10px;color:${acol};font-weight:700;white-space:nowrap;
+        min-width:90px;justify-content:space-between">
+        <span>${cur?cur.date.slice(5):"—"}</span>
+        ${cur&&cur.time?`<span style="color:#546e7a;font-weight:400;font-size:9px">${cur.time}</span>`:""}
+        <span style="opacity:.5;font-size:8px">▾</span>
+      </button>
+      <div id="scan-dd" style="display:none;position:fixed;left:0;right:0;bottom:0;
+        background:#0a0e14;border-top:1px solid #1e2836;z-index:500;
+        max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;border-bottom:1px solid #1e2836">
+          <span style="color:#546e7a;font-size:9px;letter-spacing:1px;text-transform:uppercase">SCAN WÄHLEN — ${uni.toUpperCase()}</span>
+          <button onclick="toggleScanDD()" style="background:none;border:none;color:#546e7a;font-size:18px;cursor:pointer;line-height:1;padding:0">✕</button>
+        </div>
+        ${buildScanList(st)}
+      </div>
+    </div>
+    <span style="color:#37474f;font-size:9px;margin-left:4px">${st.scans.length} Scan${st.scans.length!==1?"s":""}</span>`;
+}
+
+function buildScanList(st){
+  // Gruppiere nach Datum
+  const groups={};
+  st.scans.forEach((s,i)=>{
+    if(!groups[s.date])groups[s.date]=[];
+    groups[s.date].push({s,i});
+  });
+  const dates=Object.keys(groups).sort().reverse(); // neueste oben
+  const acol=uni==="hard"?"#ffd54f":"#00e87a";
+
+  return dates.map(date=>{
+    const entries=groups[date];
+    const isActiveDate=entries.some(({i})=>i===st.sel);
+    return`<div style="border-bottom:1px solid #0d1219">
+      <div style="padding:6px 14px 2px;display:flex;align-items:center;gap:6px">
+        <span style="color:${isActiveDate?acol:"#78909c"};font-size:11px;font-weight:700">${date}</span>
+        <span style="color:#37474f;font-size:9px">${entries.length} Scan${entries.length!==1?"s":""}</span>
+      </div>
+      ${entries.map(({s,i})=>{
+        const active=i===st.sel;
+        const timeStr=s.time||"";
+        const lbl=s.label||s.date;
+        return`<button onclick="selScan(${i});toggleScanDD()" style="
+          width:100%;text-align:left;padding:7px 14px 7px 22px;
+          background:${active?"rgba(41,182,246,.07)":"none"};
+          border:none;border-left:2px solid ${active?acol:"transparent"};
+          color:${active?acol:"#90a4ae"};cursor:pointer;font-family:inherit;
+          font-size:11px;display:flex;align-items:center;gap:8px">
+          ${timeStr?`<span style="color:#546e7a;font-size:9px;min-width:38px">${timeStr}</span>`:""}
+          <span style="flex:1">${lbl.replace(date,"").replace(/–|-/,"").trim()||lbl}</span>
+          <span style="color:#37474f;font-size:9px">${s.stocks?.length||0} Aktien</span>
+        </button>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+}
+
+function toggleScanDD(){
+  const dd=document.getElementById("scan-dd");
+  if(dd)dd.style.display=dd.style.display==="none"?"block":"none";
+}
+// Dropdown schließen bei Klick außerhalb
+document.addEventListener("click",e=>{
+  const dd=document.getElementById("scan-dd");
+  const btn=document.getElementById("scan-dd-btn");
+  if(dd&&btn&&!dd.contains(e.target)&&!btn.contains(e.target))dd.style.display="none";
+});
+function selScan(i){U().sel=i;expandedTicker=null;render();}
+
+// ════════════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════════════
+function render(){
+  renderChips();
+  if(curTab===0)renderTop10();
+  if(curTab===1)renderCompare();
+  if(curTab===2)renderUpload();
+  if(curTab===3)renderManage();
+}
+
+// ── TOP 10 ──
+function renderTop10(){
+  const el=document.getElementById("tab0");
+  const st=U();
+  if(!st.scans.length){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📊</div><div class="empty-txt">NOCH KEINE SCANS</div><button class="btn-add${uni==="hard"?" hard":""}" onclick="switchTab(2)" style="border-radius:5px;padding:11px 22px;background:${uni==="hard"?"#f5c518":"#00ff9d"};color:#000;border:none;font-weight:700;cursor:pointer;font-size:12px;letter-spacing:1px;">+ SCAN HINZUFÜGEN</button></div>`;
+    return;
+  }
+  const scan=st.scans[st.sel];
+  const top10=scan.stocks.slice(0,10);
+
+  function badge(val,pts,fmt,flag){
+    if(val==null)return`<td style="color:#37474f;font-size:9px;padding:5px 4px">—</td>`;
+    const col=pts>=20?"#00e87a":pts>=10?"#ffd54f":pts>0?"#ffb74d":"#546e7a";
+    return`<td style="padding:5px 4px"><span style="color:${col};font-size:9px;font-weight:600;white-space:nowrap">${fmt(val)}${flag?`<span style="font-size:7px"> ${flag}</span>`:""}</span></td>`;
+  }
+
+  let rows="";
+  top10.forEach((s,i)=>{
+    const sc=score(s);
+    const r=ratio(s);
+    const open=expandedTicker===s.t;
+    rows+=`<tr class="stock-row${open?" open":""}" onclick="toggleDetail('${s.t}')">
+      <td style="width:10px;color:#37474f;font-size:8px;padding:5px 3px">${i+1}</td>
+      <td style="font-weight:700;font-size:12px;color:var(--blue);letter-spacing:.2px;padding:5px 5px;white-space:nowrap">${s.t}</td>
+      <td style="padding:5px 5px"><span style="font-weight:700;font-size:12px;color:${scoreColor(sc)}">${sc}</span></td>
+      ${badge(s.atr,pATR(s.atr),v=>v.toFixed(1)+"%","")}
+      ${badge(s.v1w,pV1W(s.v1w),v=>v.toFixed(1)+"%","")}
+      ${badge(r,pRAT(r),v=>v.toFixed(2),r!=null&&r<1?"⚠":"")}
+      ${badge(s.rv,pRV(s.rv),v=>v.toFixed(2),"")}
+      ${badge(s.rsi,pRSI(s.rsi),v=>v.toFixed(0),"")}
+      <td style="text-align:center;font-size:9px;padding:5px 2px">${s.cluster?"🔥":""}</td>
+      <td style="text-align:center;padding:5px 3px;color:#37474f;font-size:8px">${open?"▲":"▼"}</td>
+    </tr>
+    ${open?`<tr><td class="detail-td" colspan="10"><div class="detail-pane">${buildDetail(s,sc)}</div></td></tr>`:""}`;
+  });
+
+  el.innerHTML=`<div style="padding:4px 6px 0">
+    <table style="font-size:9px">
+      <thead><tr style="background:#0a0e14">
+        <th style="padding:4px 3px;font-size:8px">#</th>
+        <th style="padding:4px 5px;font-size:8px">TICKER</th>
+        <th style="padding:4px 5px;font-size:8px">PTS</th>
+        <th style="font-size:8px">ATR</th>
+        <th style="font-size:8px">V1W</th>
+        <th style="font-size:8px">RATIO</th>
+        <th style="font-size:8px">RV</th>
+        <th style="font-size:8px">RSI</th>
+        <th style="padding:4px 2px"></th>
+        <th style="padding:4px 2px"></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+  ${renderInfoCards(top10)}`;
+}
+
+function buildDetail(s,sc){
+  const hist=getHistory(s.t);
+  const r=ratio(s);
+  function statChip(lbl,val,col){
+    return`<div style="text-align:center;padding:3px 5px;background:#0a0e14;border:1px solid #1e2836;border-radius:3px;min-width:38px">
+      <div style="color:${col};font-size:10px;font-weight:700;line-height:1.2">${val}</div>
+      <div style="color:#37474f;font-size:7px;margin-top:1px">${lbl}</div>
+    </div>`;
+  }
+  const stats=`<div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:8px">
+    ${statChip("Score",sc,scoreColor(sc))}
+    ${statChip("ATR",s.atr?.toFixed(1)+"%",pATR(s.atr)>=20?"#00e87a":pATR(s.atr)>=12?"#ffd54f":"#ef5350")}
+    ${statChip("V1W",s.v1w?.toFixed(1)+"%",pV1W(s.v1w)>=20?"#00e87a":pV1W(s.v1w)>=12?"#ffd54f":"#ef5350")}
+    ${statChip("Ratio",r?.toFixed(2),pRAT(r)>=20?"#00e87a":pRAT(r)>=10?"#ffd54f":"#ef5350")}
+    ${statChip("RV",s.rv?.toFixed(2),pRV(s.rv)>=20?"#00e87a":pRV(s.rv)>=10?"#ffd54f":"#ef5350")}
+    ${statChip("RSI",s.rsi?.toFixed(0),pRSI(s.rsi)>=20?"#00e87a":pRSI(s.rsi)>=15?"#ffd54f":"#ef5350")}
+  </div>`;
+  return`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-size:12px;font-weight:700;color:var(--blue)">${s.t} <span style="color:#37474f;font-size:8px;font-weight:400">${s.sec||""}</span></span>
+      <span style="color:#37474f;font-size:8px">${hist.length} Scan${hist.length!==1?"s":""}</span>
+    </div>
+    ${stats}
+    ${buildCharts(s.t)}`;
+}
+
+function toggleDetail(ticker){
+  expandedTicker=expandedTicker===ticker?null:ticker;
+  renderTop10();
+}
+
+// ── INFO CARDS ──
+function renderInfoCards(top10){
+  const map={};top10.forEach(s=>{if(s.sec)map[s.sec]=(map[s.sec]||[]).concat(s.t);});
+  const clusters=Object.entries(map).filter(([,v])=>v.length>=2).sort((a,b)=>b[1].length-a[1].length);
+  const expansions=top10.filter(s=>{const r=ratio(s);return r!=null&&r<1.0;});
+  const leader=top10[0];
+
+  const clHtml=clusters.length?clusters.map(([sec,tickers])=>{
+    const icon=tickers.length>=3?"🔥":"🔶";
+    const col=tickers.length>=3?"#ffd54f":"#ffb74d";
+    return`<div style="margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #1e2836">
+      <div style="display:flex;align-items:center;gap:4px"><span style="font-size:10px">${icon}</span><span style="color:${col};font-weight:700;font-size:10px">${sec}</span><span style="color:#37474f;font-size:8px;margin-left:auto">${tickers.length}×</span></div>
+      <div style="color:#546e7a;font-size:9px;margin-top:1px;padding-left:14px">${tickers.join(" · ")}</div>
+    </div>`;
+  }).join(""):`<span style="color:#37474f;font-size:9px">Kein Cluster.</span>`;
+
+  const lsc=leader?score(leader):0;
+  const r=leader?ratio(leader):null;
+  const ldHtml=leader?`<div style="color:#00e87a;font-weight:700;font-size:13px">${leader.t} — ${lsc} Pkt</div>
+    <div style="color:#37474f;font-size:9px;margin-top:3px;line-height:1.8">
+      ATR ${leader.atr?.toFixed(2)}% · V1W ${leader.v1w?.toFixed(2)}%<br>
+      Ratio ${r?.toFixed(2)} · RV ${leader.rv?.toFixed(2)} · RSI ${leader.rsi?.toFixed(0)}
+    </div>`:"—";
+
+  const expHtml=expansions.length?expansions.map(s=>`<div style="color:#ef5350;font-size:9px;margin-bottom:2px">${s.t} <span style="color:#37474f">Ratio ${ratio(s)?.toFixed(2)}</span></div>`).join(""):`<span style="color:#37474f;font-size:9px">Keine.</span>`;
+
+  return`<div style="padding:6px 6px 8px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px">
+    <div style="background:#0d1219;border:1px solid #1e2836;border-radius:5px;padding:9px"><div style="color:#37474f;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600">SEKTOR-CLUSTER</div>${clHtml}</div>
+    <div style="background:#0d1219;border:1px solid #1e2836;border-radius:5px;padding:9px"><div style="color:#37474f;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600">ANFÜHRER</div>${ldHtml}</div>
+    <div style="background:#0d1219;border:1px solid #1e2836;border-radius:5px;padding:9px"><div style="color:#37474f;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600">VOLA-EXPANSION</div>${expHtml}</div>
+  </div></div>`;
+}
+
+// ── COMPARE ──
+function renderCompare(){
+  const el=document.getElementById("tab1");
+  const st=U();
+  if(st.scans.length<2){el.innerHTML=`<div style="color:#333;text-align:center;padding:60px;font-size:11px;letter-spacing:1px">MINDESTENS 2 SCANS ERFORDERLICH.</div>`;return;}
+  const allT=[...new Set(st.scans.flatMap(s=>s.stocks.map(x=>x.t)))].slice(0,30);
+  const sm={};st.scans.forEach(sc=>sc.stocks.forEach(stk=>{if(!sm[stk.t])sm[stk.t]={};sm[stk.t][sc.id]=score(stk);}));
+  const headers=st.scans.map((s,i)=>`<th style="color:${i===st.sel?"#00ff9d":"#333"};text-align:center;min-width:75px">${s.label}</th>`).join("");
+  const rows=allT.map(t=>{
+    const row=st.scans.map(s=>sm[t]?.[s.id]??null);
+    const cells=row.map((sc,i)=>{
+      if(sc===null)return`<td style="text-align:center;color:#1a1a1a">—</td>`;
+      const prev=row[i-1];const d=sc!==null&&prev!==null?sc-prev:null;
+      const dHtml=d!==null?`<span style="font-size:9px;margin-left:3px;color:${d>0?"#00ff9d":d<0?"#ff4444":"#333"}">${d>0?"▲"+d:d<0?"▼"+Math.abs(d):"="}</span>`:"";
+      return`<td style="text-align:center"><span style="color:${scoreColor(sc)};font-weight:700">${sc}${dHtml}</span></td>`;
+    }).join("");
+    return`<tr style="border-bottom:1px solid #0e0e0e"><td style="padding:8px 10px;color:#fff;font-weight:700;font-size:13px;letter-spacing:.5px">${t}</td>${cells}</tr>`;
+  }).join("");
+  el.innerHTML=`<div class="compare-wrap"><div class="compare-ttl">SCORE-VERGLEICH · ${uni.toUpperCase()} · TOP 30</div><table><thead><tr><th style="min-width:75px">TICKER</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ── UPLOAD ──
+function renderUpload(){
+  const el=document.getElementById("tab2");
+  const f=U().form;
+  el.innerHTML=`<div class="upload-wrap">
+    <div class="upload-title${uni==="hard"?" hard":""}">${uni==="soft"?"🟢":"🟡"} NEUER SCAN — ${uni.toUpperCase()}</div>
+    <div style="display:flex;gap:8px">
+      <div class="field" style="flex:2"><label>Datum</label><input type="date" id="f-date" value="${f.date}"></div>
+      <div class="field" style="flex:1"><label>Uhrzeit</label><input type="time" id="f-time" value="${f.time||""}" placeholder="09:30"></div>
+    </div>
+    <div class="field"><label>Label (optional)</label><input type="text" id="f-label" placeholder="z.B. Di KW18" value="${f.label}"></div>
+    <div class="drop-zone${f.file?" ready":""}" id="dz" onclick="document.getElementById('fi').click()">
+      <div class="drop-icon">📂</div>
+      <div class="drop-main${f.file?" ok":""}">${f.file?`✓ ${f.file}<br><span class="drop-sub">Tippen zum Ersetzen</span>`:"CSV-Datei tippen oder ablegen"}</div>
+      ${!f.file?`<div class="drop-sub" style="margin-top:4px">Symbol, ATR, Volatilität 1W/1M, RSI, Rel.Vol, Sektor</div>`:""}
+    </div>
+    <input type="file" id="fi" accept=".csv,text/csv" style="display:none" multiple>
+    ${f.csv?`<div class="preview"><div class="preview-lbl">Vorschau</div><div class="preview-txt">${esc(f.csv.split("\n").slice(0,4).join("\n"))}${f.csv.split("\n").length>4?"\n…":""}</div></div>`:""}
+    <div class="err" id="ferr"></div>
+    <button class="btn-add${uni==="hard"?" hard":""}" onclick="doAdd()" ${!f.csv?"disabled":""}>SCAN HINZUFÜGEN →</button>
+    <details><summary>Manuelle CSV-Eingabe</summary>
+      <textarea id="ftxt" rows="7" placeholder="Symbol,Average True Range % (14) 1 Tag,...">${esc(f.csv)}</textarea>
+      <button onclick="applyTxt()" style="margin-top:5px;padding:6px 13px;background:#111;border:1px solid #222;color:#00ff9d;cursor:pointer;border-radius:4px;font-size:10px;font-family:inherit;">ÜBERNEHMEN</button>
+    </details>
+    <div class="schema"><div class="schema-ttl">Bewertungsschema</div>
+      ${[["ATR (14)%","<2.5→20 · 2.5–3.2→12 · 3.2–4.0→8 · >4.0→0"],["VOLA 1W %","<2.0→20 · 2.0–2.5→12 · >2.5→0"],["RATIO 1M/1W",">1.15→20 · 1.0–1.15→10 · <1.0→0 ⚠️"],["RELVOL","<0.7→20 · 0.7–1.2→10 · >1.2→0"],["RSI (14)","45–65→20 · 65–80→15 · sonst→0"]].map(([k,v])=>`<div class="schema-row"><span class="schema-k">${k}</span><span class="schema-v">${v}</span></div>`).join("")}
+    </div>
+  </div>`;
+  document.getElementById("f-date").oninput=e=>U().form.date=e.target.value;
+  document.getElementById("f-time").oninput=e=>U().form.time=e.target.value;
+  document.getElementById("f-label").oninput=e=>U().form.label=e.target.value;
+  const dz=document.getElementById("dz");
+  dz.ondragover=e=>{e.preventDefault();dz.classList.add("drag");};
+  dz.ondragleave=()=>dz.classList.remove("drag");
+  dz.ondrop=e=>{e.preventDefault();dz.classList.remove("drag");handleFile(e.dataTransfer.files[0]);};
+  document.getElementById("fi").onchange=e=>{
+    const files=Array.from(e.target.files);
+    if(files.length===1){handleFile(files[0]);return;}
+    // Mehrere Dateien: alle einlesen, dann chronologisch einfügen
+    let done=0;
+    files.forEach(file=>{
+      const r=new FileReader();
+      r.onload=ev=>{
+        const raw=parseCSV(ev.target.result);
+        if(raw.length){
+          const dm=file.name.match(/(\d{4}-\d{2}-\d{2})/);
+          const date=dm?dm[1]:new Date().toISOString().slice(0,10);
+          const label=file.name.replace(/\.csv$/i,"").replace(/_/g," ");
+          const tm=file.name.match(/[_\-T](\d{2})[:\-](\d{2})/);
+          const time=tm?`${tm[1]}:${tm[2]}`:nowTime();
+          const sc=buildScan(date,label,raw,time);
+          if(!U().scans.some(s=>s.date===date&&s.time===time)){
+            U().scans.push(sc);
+          }
+        }
+        done++;
+        if(done===files.length){
+          sortScansChronologically();
+          saveU();
+          expandedTicker=null;
+          switchTab(0);
+        }
+      };
+      r.readAsText(file);
+    });
+  };
+}
+function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function nowTime(){
+  const n=new Date();
+  return n.getHours().toString().padStart(2,"0")+":"+n.getMinutes().toString().padStart(2,"0");
+}
+function handleFile(file){
+  if(!file)return;
+  const uploadTime=nowTime(); // Uhrzeit des Uploads festhalten
+  const r=new FileReader();
+  r.onload=e=>{
+    const f=U().form;
+    f.csv=e.target.result;
+    f.file=file.name;
+    // Datum aus Dateiname
+    const dm=file.name.match(/(\d{4}-\d{2}-\d{2})/);
+    if(dm)f.date=dm[1];
+    // Uhrzeit: erst aus Dateiname, sonst Upload-Zeit
+    const tm=file.name.match(/[_\-T](\d{2})[:\-](\d{2})/);
+    f.time=tm?`${tm[1]}:${tm[2]}`:uploadTime;
+    if(!f.label)f.label=file.name.replace(/\.csv$/i,"").replace(/_/g," ");
+    renderUpload();
+  };
+  r.readAsText(file);
+}
+function doAdd(){
+  const f=U().form;
+  f.date=document.getElementById("f-date")?.value||f.date;
+  f.time=document.getElementById("f-time")?.value||f.time||nowTime();
+  f.label=document.getElementById("f-label")?.value||f.label;
+  const err=document.getElementById("ferr");
+  if(!f.csv){err.textContent="Keine Daten.";return;}
+  const raw=parseCSV(f.csv);
+  if(!raw.length){err.textContent="CSV konnte nicht geparst werden.";return;}
+  const sc=buildScan(f.date,f.label,raw,f.time);
+  U().scans.push(sc);
+  sortScansChronologically();
+  saveU();
+  U().form={date:new Date().toISOString().slice(0,10),label:"",csv:"",file:"",time:""};
+  expandedTicker=null;switchTab(0);
+}
+
+// ── MANAGE ──
+function renderManage(){
+  const el=document.getElementById("tab3");
+  const st=U();
+  // storage indicator
+  const dotHtml=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:14px">
+    <span id="dot" style="width:7px;height:7px;border-radius:50%;background:#333;display:inline-block"></span>
+    <span id="dot-lbl" style="font-size:9px;color:#333;letter-spacing:1px">…</span>
+  </div>`;
+  const rows=st.scans.map((s,i)=>{
+    const isSeed=st.seedIds.has(s.id);
+    const top=s.stocks[0]?score(s.stocks[0]):0;
+    return`<div class="scan-item">
+      <div class="scan-info">
+        <div class="scan-name">${s.label}${isSeed?`<span class="seed-tag">SEED</span>`:""}</div>
+        <div class="scan-meta">${s.date} · ${s.stocks.length} Aktien · Top: <span style="color:${scoreColor(top)}">${top}</span> Pkt</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="btn-view" onclick="selScan(${i});switchTab(0)">ANZEIGEN</button>
+        ${!isSeed?`<button class="btn-del" id="del-${s.id}" onclick="confirmDel(${s.id})">LÖSCHEN</button>`:""}
+      </div>
+    </div>`;
+  }).join("");
+  el.innerHTML=`<div class="manage-wrap">
+    ${dotHtml}
+    <div class="manage-ttl${uni==="hard"?" hard":""}">${uni==="soft"?"🟢":"🟡"} ${uni.toUpperCase()} — SCANS</div>
+    ${st.scans.length?rows:`<div style="color:#333;font-size:11px">Noch keine Scans.</div>`}
+  </div>`;
+  setDot(true);
+}
+function confirmDel(id){
+  const btn=document.getElementById("del-"+id);if(!btn)return;
+  if(btn.dataset.armed==="1"){delScan(id);}
+  else{btn.dataset.armed="1";btn.textContent="SICHER?";btn.style.background="rgba(255,68,68,.2)";
+    setTimeout(()=>{if(btn&&btn.dataset.armed==="1"){btn.dataset.armed="0";btn.textContent="LÖSCHEN";btn.style.background="";}},3000);}
+}
+function delScan(id){U().scans=U().scans.filter(s=>s.id!==id);saveU();U().sel=Math.max(0,Math.min(U().sel,U().scans.length-1));render();}
+
+// ════════════════════════════════════════════════════════════════
+// PWA
+// ════════════════════════════════════════════════════════════════
+(function(){
+  function makeIcon(sz){
+    const c=document.createElement("canvas");c.width=c.height=sz;const ctx=c.getContext("2d");
+    ctx.fillStyle="#000";ctx.fillRect(0,0,sz,sz);
+    ctx.strokeStyle="#00ff9d";ctx.lineWidth=sz*.025;ctx.beginPath();ctx.roundRect(sz*.07,sz*.07,sz*.86,sz*.86,sz*.1);ctx.stroke();
+    ctx.fillStyle="#00ff9d";ctx.font=`bold ${sz*.28}px -apple-system,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("VCP",sz/2,sz*.42);
+    ctx.font=`${sz*.1}px -apple-system,sans-serif`;ctx.fillStyle="rgba(0,255,157,.5)";ctx.fillText("GOLD",sz/2,sz*.65);
+    return c.toDataURL("image/png");
+  }
+  const mf={name:"VCP Analyzer Pro",short_name:"VCP",start_url:"./",display:"standalone",background_color:"#000",theme_color:"#000",orientation:"portrait-primary",icons:[{src:makeIcon(192),sizes:"192x192",type:"image/png"},{src:makeIcon(512),sizes:"512x512",type:"image/png"}]};
+  document.getElementById("pwa-manifest").href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:"application/json"}));
+})();
+if("serviceWorker" in navigator){
+  const sw=`const C="vcp-v4";self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(["./"])));self.skipWaiting();});self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener("fetch",e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match("./"))));});`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:"application/javascript"})),{scope:"./"}).catch(()=>{});
+}
+let deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;showInstallBanner();});
+function showInstallBanner(){
+  if(document.getElementById("ib"))return;
+  const b=document.createElement("div");b.id="ib";
+  b.style.cssText="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#0a0a0a;border:1px solid rgba(0,255,157,.3);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 4px 24px rgba(0,255,157,.15);max-width:300px;width:90%";
+  b.innerHTML=`<div style="flex:1"><div style="color:#00ff9d;font-size:11px;font-weight:700;letter-spacing:1px">ALS APP INSTALLIEREN</div><div style="color:#444;font-size:9px;margin-top:2px">Zum Homescreen hinzufügen</div></div><button onclick="doInstall()" style="background:#00ff9d;color:#000;border:none;padding:7px 12px;border-radius:4px;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit;">INSTALL</button><button onclick="this.parentElement.remove()" style="background:none;border:none;color:#444;font-size:18px;cursor:pointer;line-height:1">✕</button>`;
+  document.body.appendChild(b);
+}
+function doInstall(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;const b=document.getElementById("ib");if(b)b.remove();});}
+window.addEventListener("load",()=>{
+  if(!window.matchMedia("(display-mode:standalone)").matches&&!navigator.standalone&&!sessionStorage.getItem("ib-done")){
+    setTimeout(()=>{if(!deferredPrompt){
+      if(document.getElementById("ib"))return;
+      const b=document.createElement("div");b.id="ib";
+      b.style.cssText="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#0a0a0a;border:1px solid rgba(0,255,157,.3);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 4px 24px rgba(0,255,157,.15);max-width:300px;width:90%";
+      b.innerHTML=`<div style="flex:1"><div style="color:#00ff9d;font-size:11px;font-weight:700;letter-spacing:1px">ALS APP SPEICHERN</div><div style="color:#444;font-size:9px;margin-top:2px">Menü → "Zum Startbildschirm"</div></div><button onclick="sessionStorage.setItem('ib-done','1');this.parentElement.remove()" style="background:none;border:none;color:#444;font-size:18px;cursor:pointer;line-height:1">✕</button>`;
+      document.body.appendChild(b);
+    }},2500);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════
+loadAll();
+render();
+</script>
+</body>
+</html>
